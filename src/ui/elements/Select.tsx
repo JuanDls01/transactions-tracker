@@ -16,7 +16,7 @@ const Select = ({ children, ...props }: SelectPropsType) => {
           "py-1.5 pl-3 pr-7",
           "text-base text-gray-500 placeholder:text-gray-400 sm:text-sm/6",
           "appearance-none rounded-md outline outline-1 -outline-offset-1 outline-gray-300",
-          "focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+          "focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600",
         )}
       >
         {children}
