@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { schema } from "./schemas";
 import { z } from "zod";
 import { TransactionCategory } from "@/types/transactions";
+import Button from "@/ui/elements/Button";
 
 type TransactionFormSchema = z.output<typeof schema>;
 
@@ -22,7 +23,7 @@ const TransactionForm = () => {
   } = useForm<TransactionFormSchema>({
     resolver: zodResolver(schema),
     defaultValues: {
-      currency: "ARS",
+      currency: "ars",
       category: TransactionCategory.Food,
     },
   });
@@ -54,9 +55,9 @@ const TransactionForm = () => {
           <div className="grid shrink-0 grid-cols-1 focus-within:relative">
             <select
               id="currency"
-              name="currency"
               aria-label="Currency"
               className="col-start-1 row-start-1 appearance-none rounded-md py-1.5 pl-3 pr-7 text-base text-gray-500 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              {...register("currency", { required: true })}
             >
               {currencyOptions.map((currency) => {
                 return (
@@ -73,12 +74,15 @@ const TransactionForm = () => {
           </div>
         </div>
         <p role="alert" className="text-red-500 text-xs italic">
-          {errors.amount?.message}
+          {errors.amount?.message ?? errors.currency?.message}
         </p>
       </div>
       <div className="space-y-1">
         <Label htmlFor="category">Categoría</Label>
-        <Select {...register("category", { required: true })}>
+        <Select
+          {...register("category", { required: true })}
+          errorMessage={errors.category?.message}
+        >
           {transactionCategoryOptions.map((category) => {
             return (
               <option key={category.key} value={category.value}>
@@ -94,14 +98,10 @@ const TransactionForm = () => {
           id="description"
           placeholder="Escribe una breve descripción"
           {...register("description")}
+          errorMessage={errors.description?.message}
         />
       </div>
-      <button
-        type="submit"
-        className="shadow bg-purple-600 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-      >
-        Guardar
-      </button>
+      <Button type="submit" />
     </form>
   );
 };
