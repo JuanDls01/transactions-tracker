@@ -1,48 +1,55 @@
+"use client";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import Input from "../elements/Input";
-import Label from "../elements/Label";
-import Select from "../elements/Select";
-import TeaxtArea from "../elements/TextArea";
+import Input from "../../elements/Input";
+import Label from "../../elements/Label";
+import Select from "../../elements/Select";
+import TeaxtArea from "../../elements/TextArea";
+import { clsx } from "clsx";
+import { useForm } from "react-hook-form";
+import { currencyOptions, transactionCategoryOptions } from "./consts";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { schema } from "./schemas";
+import { z } from "zod";
+import { TransactionCategory } from "@/types/transactions";
 
-export const transactionCategoryOptions = [
-  { key: "leisure", value: "LEISURE", label: "🎮 Ocio" },
-  { key: "health", value: "HEALTH", label: "🩺 Salud" },
-  { key: "home", value: "HOME", label: "🏠 Hogar" },
-  { key: "subscriptions", value: "SUBSCRIPTIONS", label: "📺 Subscripciones" },
-  { key: "food", value: "FOOD", label: "🍽️ Comida" },
-  {
-    key: "savings/investments",
-    value: "SAVINGS/INVESTMENTS",
-    label: "💰 Ahooro / Inversiones",
-  },
-  { key: "education", value: "EDUCATION", label: "📚 Educación" },
-  { key: "travel", value: "TRAVEL", label: "✈️ Viajes" },
-  { key: "work", value: "WORK", label: "💼 Trabajo" },
-  { key: "miscellaneous", value: "miscellaneous", label: "🧩 Otro" },
-];
-
-const currencyOptions = [
-  { key: "ARS", value: "ars", label: "ARS" },
-  { key: "BTC", value: "btc", label: "BTC" },
-  { key: "USD", value: "usd", label: "USD" },
-  { key: "USDT", value: "usdt", label: "USDT" },
-];
+type TransactionFormSchema = z.output<typeof schema>;
 
 const TransactionForm = () => {
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<TransactionFormSchema>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      currency: "ARS",
+      category: TransactionCategory.Food,
+    },
+  });
+
   return (
-    <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 space-y-2 sm:space-y-4">
+    <form
+      onSubmit={handleSubmit((data) => console.log(data))}
+      className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 space-y-2 sm:space-y-4"
+    >
       <div className="space-y-1">
         <Label htmlFor="amount">Monto</Label>
-        <div className="flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
+        <div
+          className={clsx(
+            "flex items-center rounded-md bg-white pl-3",
+            "outline outline-1 -outline-offset-1 outline-gray-300",
+            "has-[input:focus-within]:outline has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600",
+          )}
+        >
           <div className="shrink-0 select-none text-base text-gray-500 sm:text-sm/6">
             $
           </div>
           <Input
-            id="price"
-            name="price"
-            type="text"
+            id="amount"
+            type="number"
             placeholder="0.00"
-            className="text-base sm:text-sm/6 w-4/6 text-gray-900 border-none focus:outline-none focus:border-none pl-1 "
+            className="text-base sm:text-sm/6 w-4/6 text-gray-900 border-none focus:outline-none focus:border-none pl-1"
+            {...register("amount", { valueAsNumber: true, required: true })}
           />
           <div className="grid shrink-0 grid-cols-1 focus-within:relative">
             <select
@@ -65,10 +72,13 @@ const TransactionForm = () => {
             />
           </div>
         </div>
+        <p role="alert" className="text-red-500 text-xs italic">
+          {errors.amount?.message}
+        </p>
       </div>
       <div className="space-y-1">
         <Label htmlFor="category">Categoría</Label>
-        <Select>
+        <Select {...register("category", { required: true })}>
           {transactionCategoryOptions.map((category) => {
             return (
               <option key={category.key} value={category.value}>
@@ -82,13 +92,13 @@ const TransactionForm = () => {
         <Label htmlFor="description">Descripción</Label>
         <TeaxtArea
           id="description"
-          name="description"
           placeholder="Escribe una breve descripción"
+          {...register("description")}
         />
       </div>
       <button
+        type="submit"
         className="shadow bg-purple-600 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-        type="button"
       >
         Guardar
       </button>
