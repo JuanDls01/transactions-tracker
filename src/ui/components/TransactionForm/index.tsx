@@ -12,10 +12,25 @@ import { schema } from './schemas';
 import { z } from 'zod';
 import { TransactionCategory } from '@/types/transactions';
 import Button from '@/ui/elements/Button';
+import { FormEvent, startTransition, useActionState, useRef } from 'react';
+import { onSubmitAction } from './actions';
+import { ActionResponse } from '@/types/actions';
 
 type TransactionFormSchema = z.output<typeof schema>;
 
+const initialState: ActionResponse<TransactionFormSchema> = {
+  success: false,
+  message: '',
+};
+
 const TransactionForm = () => {
+  // Use Action State to handle server action and server validations
+  // state: server action response
+  // formAction: dispatch server action
+  // isPedning: boolean to know if is loading
+  const [state, formAction, isPending] = useActionState(onSubmitAction, initialState);
+
+  // Use RHF to handle client side validations
   const {
     register,
     formState: { errors },
@@ -25,12 +40,31 @@ const TransactionForm = () => {
     defaultValues: {
       currency: 'ars',
       category: TransactionCategory.Food,
+      ...(state?.inputs ?? {}),
     },
   });
 
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const onSubmit = (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    handleSubmit(() => {
+      const formData = new FormData(formRef.current!);
+
+      // We cannot dispatch an async fc of useActionState (onSubmitAction)
+      // outside of an action context, so we use startTransition
+      // reference: https://react.dev/reference/rsc/use-server#calling-a-server-function-outside-of-form
+      startTransition(() => {
+        formAction(formData);
+      });
+    })(evt);
+  };
+
   return (
     <form
-      onSubmit={handleSubmit((data) => console.log(data))}
+      action={formAction}
+      onSubmit={onSubmit}
+      ref={formRef}
       className='bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 space-y-2 sm:space-y-4'
     >
       <div className='space-y-1'>
@@ -96,7 +130,8 @@ const TransactionForm = () => {
           errorMessage={errors.description?.message}
         />
       </div>
-      <Button type='submit' />
+      {state?.message && <p className='text-red-500'>{state.message}</p>}
+      <Button type='submit'>{isPending ? 'Guardando...' : 'Guardar'}</Button>
     </form>
   );
 };

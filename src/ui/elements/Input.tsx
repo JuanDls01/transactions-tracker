@@ -9,10 +9,11 @@ const Input = ({ errorMessage, ...props }: InputPropsType) => {
     <>
       <input
         className={clsx(
-          'w-full min-w-0 py-1.5 px-3',
+          'w-full min-w-0 py-1.5 px-3 appearance-none',
           'text-gray-900 sm:text-sm/6 text-base',
-          'rounded-md outline outline-1 -outline-offset-1 outline-gray-300',
-          'focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600',
+          'rounded-md outline outline-1 -outline-offset-1',
+          'focus:outline focus:outline-2 focus:-outline-offset-2 ',
+          errorMessage ? 'outline-red-500 focus:outline-red-500' : 'outline-gray-300 focus:outline-indigo-600',
         )}
         {...props}
       />
