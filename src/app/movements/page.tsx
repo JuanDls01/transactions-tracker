@@ -5,12 +5,10 @@ import { ScanCommand } from '@aws-sdk/client-dynamodb';
 const MovementsPage = async () => {
   const transactions = await getTransactions();
   return (
-    <main>
-      <section>
-        <h2>Registro de transacciones:</h2>
-        {transactions?.map((transaction, index) => <p key={index}>{JSON.stringify(transaction)}</p>)}
-      </section>
-    </main>
+    <section className='flex flex-col space-y-4'>
+      <h2>Registro de transacciones:</h2>
+      {transactions?.map((transaction, index) => <p key={index}>{JSON.stringify(transaction)}</p>)}
+    </section>
   );
 };
 
