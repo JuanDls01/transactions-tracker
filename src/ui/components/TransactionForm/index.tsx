@@ -1,17 +1,17 @@
-"use client";
-import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import Input from "../../elements/Input";
-import Label from "../../elements/Label";
-import Select from "../../elements/Select";
-import TeaxtArea from "../../elements/TextArea";
-import { clsx } from "clsx";
-import { useForm } from "react-hook-form";
-import { currencyOptions, transactionCategoryOptions } from "./consts";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { schema } from "./schemas";
-import { z } from "zod";
-import { TransactionCategory } from "@/types/transactions";
-import Button from "@/ui/elements/Button";
+'use client';
+import { ChevronDownIcon } from '@heroicons/react/24/solid';
+import Input from '../../elements/Input';
+import Label from '../../elements/Label';
+import Select from '../../elements/Select';
+import TeaxtArea from '../../elements/TextArea';
+import { clsx } from 'clsx';
+import { useForm } from 'react-hook-form';
+import { currencyOptions, transactionCategoryOptions } from './consts';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { schema } from './schemas';
+import { z } from 'zod';
+import { TransactionCategory } from '@/types/transactions';
+import Button from '@/ui/elements/Button';
 
 type TransactionFormSchema = z.output<typeof schema>;
 
@@ -23,7 +23,7 @@ const TransactionForm = () => {
   } = useForm<TransactionFormSchema>({
     resolver: zodResolver(schema),
     defaultValues: {
-      currency: "ars",
+      currency: 'ars',
       category: TransactionCategory.Food,
     },
   });
@@ -31,33 +31,31 @@ const TransactionForm = () => {
   return (
     <form
       onSubmit={handleSubmit((data) => console.log(data))}
-      className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 space-y-2 sm:space-y-4"
+      className='bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 space-y-2 sm:space-y-4'
     >
-      <div className="space-y-1">
-        <Label htmlFor="amount">Monto</Label>
+      <div className='space-y-1'>
+        <Label htmlFor='amount'>Monto</Label>
         <div
           className={clsx(
-            "flex items-center rounded-md bg-white pl-3",
-            "outline outline-1 -outline-offset-1 outline-gray-300",
-            "has-[input:focus-within]:outline has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600",
+            'flex items-center rounded-md bg-white pl-3',
+            'outline outline-1 -outline-offset-1 outline-gray-300',
+            'has-[input:focus-within]:outline has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600',
           )}
         >
-          <div className="shrink-0 select-none text-base text-gray-500 sm:text-sm/6">
-            $
-          </div>
+          <div className='shrink-0 select-none text-base text-gray-500 sm:text-sm/6'>$</div>
           <Input
-            id="amount"
-            type="number"
-            placeholder="0.00"
-            className="text-base sm:text-sm/6 w-4/6 text-gray-900 border-none focus:outline-none focus:border-none pl-1"
-            {...register("amount", { valueAsNumber: true, required: true })}
+            id='amount'
+            type='number'
+            placeholder='0.00'
+            className='text-base sm:text-sm/6 w-4/6 text-gray-900 border-none focus:outline-none focus:border-none pl-1'
+            {...register('amount', { valueAsNumber: true, required: true })}
           />
-          <div className="grid shrink-0 grid-cols-1 focus-within:relative">
+          <div className='grid shrink-0 grid-cols-1 focus-within:relative'>
             <select
-              id="currency"
-              aria-label="Currency"
-              className="col-start-1 row-start-1 appearance-none rounded-md py-1.5 pl-3 pr-7 text-base text-gray-500 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-              {...register("currency", { required: true })}
+              id='currency'
+              aria-label='Currency'
+              className='col-start-1 row-start-1 appearance-none rounded-md py-1.5 pl-3 pr-7 text-base text-gray-500 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6'
+              {...register('currency', { required: true })}
             >
               {currencyOptions.map((currency) => {
                 return (
@@ -68,21 +66,18 @@ const TransactionForm = () => {
               })}
             </select>
             <ChevronDownIcon
-              aria-hidden="true"
-              className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+              aria-hidden='true'
+              className='pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4'
             />
           </div>
         </div>
-        <p role="alert" className="text-red-500 text-xs italic">
+        <p role='alert' className='text-red-500 text-xs italic'>
           {errors.amount?.message ?? errors.currency?.message}
         </p>
       </div>
-      <div className="space-y-1">
-        <Label htmlFor="category">Categoría</Label>
-        <Select
-          {...register("category", { required: true })}
-          errorMessage={errors.category?.message}
-        >
+      <div className='space-y-1'>
+        <Label htmlFor='category'>Categoría</Label>
+        <Select {...register('category', { required: true })} errorMessage={errors.category?.message}>
           {transactionCategoryOptions.map((category) => {
             return (
               <option key={category.key} value={category.value}>
@@ -92,16 +87,16 @@ const TransactionForm = () => {
           })}
         </Select>
       </div>
-      <div className="space-y-1">
-        <Label htmlFor="description">Descripción</Label>
+      <div className='space-y-1'>
+        <Label htmlFor='description'>Descripción</Label>
         <TeaxtArea
-          id="description"
-          placeholder="Escribe una breve descripción"
-          {...register("description")}
+          id='description'
+          placeholder='Escribe una breve descripción'
+          {...register('description')}
           errorMessage={errors.description?.message}
         />
       </div>
-      <Button type="submit" />
+      <Button type='submit' />
     </form>
   );
 };
