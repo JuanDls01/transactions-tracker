@@ -17,7 +17,8 @@
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts",
-    "build": "prisma generate && next build"
+    "build": "prisma generate && next build",
+    "postinstall": "prisma generate"
   },
   "husky": {
     "hooks": {
