@@ -16,7 +16,8 @@
     "prisma:seed": "npx prisma db seed"
   },
   "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts",
+    "build": "prisma generate && next build"
   },
   "husky": {
     "hooks": {
