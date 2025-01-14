@@ -1,12 +1,8 @@
 'use server';
 import { schema } from './schemas';
-import { envConfig } from '@/env.config';
-import { FIRST_USER_ID } from '@/utils/consts';
-import { v4 as uuidv4 } from 'uuid';
-import { PutItemCommand } from '@aws-sdk/client-dynamodb';
-import dynamoDbClient from '@/lib/dynamodb';
 import { TransactionCategory } from '@/types/transactions';
 import { ActionResponse } from '@/types/actions';
+import prisma from '@/lib/prisma';
 
 export const onSubmitAction = async (
   _: ActionResponse<typeof schema> | null,
@@ -32,28 +28,27 @@ export const onSubmitAction = async (
       };
     }
 
-    const { amount, category, description, currency } = parsed.data;
+    const { amount, category, description, currency, type } = parsed.data;
 
     // Create an ID for the item to be created
-    const transactionId = uuidv4();
 
-    const todayISO = new Date().toISOString();
+    const user = await prisma.user.findFirst();
 
-    const params = {
-      TableName: envConfig.table_name,
-      Item: {
-        userId: { S: FIRST_USER_ID }, // Partition Key
-        id: { S: transactionId }, // Sort Key
-        amount: { N: amount.toString() },
-        currency: { S: currency },
-        category: { S: category },
-        date: { S: todayISO },
-        description: { S: description ?? '' },
+    await prisma.transaction.create({
+      data: {
+        type,
+        amount,
+        category,
+        description,
+        currency,
+        author: {
+          connect: {
+            id: user?.id,
+          },
+        },
       },
-    };
+    });
 
-    const command = new PutItemCommand(params);
-    await dynamoDbClient.send(command);
     return { success: true, message: 'Transaction saved successfully!' };
   } catch (err) {
     console.error('Error adding item: ', err);
