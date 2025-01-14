@@ -16,9 +16,14 @@ export const transactionCategoryOptions = [
   { key: 'miscellaneous', value: 'miscellaneous', label: '🧩 Otro' },
 ];
 
+export const transactionTypeOptions = [
+  { key: 'INCOME', value: 'INCOME', label: '+' },
+  { key: 'EXPENSE', value: 'EXPENSE', label: '-' },
+];
+
 export const currencyOptions = [
-  { key: 'ARS', value: 'ars', label: 'ARS' },
-  { key: 'BTC', value: 'btc', label: 'BTC' },
-  { key: 'USD', value: 'usd', label: 'USD' },
-  { key: 'USDT', value: 'usdt', label: 'USDT' },
+  { key: 'ARS', value: 'ARS', label: 'ARS' },
+  { key: 'BTC', value: 'BTC', label: 'BTC' },
+  { key: 'USD', value: 'USD', label: 'USD' },
+  { key: 'USDT', value: 'USDT', label: 'USDT' },
 ];
