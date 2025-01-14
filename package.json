@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "lint:prettier": "prettier --check .",
@@ -13,12 +13,11 @@
     "prepare": "husky install",
     "prisma:migration": "npx prisma migrate dev",
     "prisma:publish": "npx prisma db push",
-    "prisma:seed": "npx prisma db seed"
+    "prisma:seed": "npx prisma db seed",
+    "postinstall": "prisma generate"
   },
   "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts",
-    "build": "prisma generate && next build",
-    "postinstall": "prisma generate"
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "husky": {
     "hooks": {
