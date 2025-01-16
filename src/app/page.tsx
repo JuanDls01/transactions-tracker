@@ -1,4 +1,4 @@
-import TransactionForm from '@/ui/components/TransactionForm';
+import TransactionForm from '@/ui/components/transaction-form';
 
 export default function Home() {
   return (
