@@ -2,7 +2,7 @@
 import { schema } from './schemas';
 import { TransactionCategory } from '@/types/transactions';
 import { ActionResponse } from '@/types/actions';
-import prisma from '@/lib/prisma';
+import prismaDb from '@/lib/prisma';
 
 export const onSubmitAction = async (
   _: ActionResponse<typeof schema> | null,
@@ -32,9 +32,9 @@ export const onSubmitAction = async (
 
     // Create an ID for the item to be created
 
-    const user = await prisma.user.findFirst();
+    const user = await prismaDb.user.findFirst();
 
-    await prisma.transaction.create({
+    await prismaDb.transaction.create({
       data: {
         type,
         amount,

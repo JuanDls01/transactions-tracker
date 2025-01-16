@@ -1,4 +1,4 @@
-import prismaClient from '@/lib/prisma';
+import prismaDb from '@/lib/prisma';
 import { columns } from './movements';
 import { DataTable } from '../../ui/components/data-table';
 
@@ -15,7 +15,7 @@ const MovementsPage = async () => {
 
 const getTransactions = async () => {
   try {
-    const transactions = await prismaClient.transaction.findMany();
+    const transactions = await prismaDb.transaction.findMany();
     return transactions;
   } catch (error) {
     console.error('Error scanning items:', error);
