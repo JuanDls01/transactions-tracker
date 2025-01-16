@@ -1,5 +1,14 @@
 'use client';
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/ui/elements/dropdown-menu';
+import { EllipsisHorizontalIcon } from '@heroicons/react/16/solid';
 import { Transaction } from '@prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
 
@@ -24,7 +33,9 @@ export const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => {
       const { amount, currency, type } = row.original;
       return (
-        <div className='text-right font-medium'>{`${type === 'INCOME' ? '+' : '-'} ${amount} ${currency}`}</div>
+        <div
+          className={`text-right font-medium pr-4`}
+        >{`${type === 'INCOME' ? '+' : '-'} $${amount} ${currency}`}</div>
       );
     },
   },
@@ -34,7 +45,20 @@ export const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => {
       const { category } = row.original;
       const label = categoryLabels[category];
-      return <div className='text-right font-medium'>{`${label}`}</div>;
+      return <div>{`${label}`}</div>;
+    },
+  },
+  {
+    accessorKey: 'createdAt',
+    header: () => <p className='text-left'>Fecha</p>,
+    cell: ({ row }) => {
+      const date = new Date(row.getValue('createdAt'));
+      const formattedDate = date.toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+      });
+      return <div>{`${formattedDate}`}</div>;
     },
   },
   {
@@ -42,7 +66,27 @@ export const columns: ColumnDef<Transaction>[] = [
     header: () => <p className='text-left'>Descripción</p>,
     cell: ({ row }) => {
       const description = row.getValue('description');
-      return <div className='text-right font-medium'>{`${description}`}</div>;
+      return <div>{`${description}`}</div>;
+    },
+  },
+  {
+    id: 'actions',
+    cell: () => {
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className='h-4 w-4 p-0 appearance-none outline-none'>
+              <EllipsisHorizontalIcon />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align='end'>
+            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>Editar</DropdownMenuItem>
+            <DropdownMenuItem>Eliminar</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
     },
   },
 ];
