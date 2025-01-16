@@ -1,4 +1,6 @@
-import prismaClient from '@/lib/prisma';
+import prismaDb from '@/lib/prisma';
+import { columns } from './movements';
+import { DataTable } from '../../ui/components/data-table';
 
 const MovementsPage = async () => {
   const transactions = await getTransactions();
@@ -6,22 +8,14 @@ const MovementsPage = async () => {
   return (
     <section className='flex flex-col space-y-4'>
       <h2>Registro de transacciones:</h2>
-      {transactions?.map((transaction) => (
-        <div key={transaction.id}>
-          <p>{transaction.type}</p>
-          <p>{transaction.currency}</p>
-          <p>{transaction.amount}</p>
-          <p>{transaction.description}</p>
-          <p>{transaction.amount}</p>
-        </div>
-      ))}
+      <DataTable columns={columns} data={transactions} />
     </section>
   );
 };
 
 const getTransactions = async () => {
   try {
-    const transactions = await prismaClient.transaction.findMany();
+    const transactions = await prismaDb.transaction.findMany();
     return transactions;
   } catch (error) {
     console.error('Error scanning items:', error);

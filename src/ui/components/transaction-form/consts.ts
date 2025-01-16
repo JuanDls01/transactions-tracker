@@ -5,9 +5,9 @@ export const transactionCategoryOptions = [
   { key: 'home', value: 'HOME', label: '🏠 Hogar' },
   { key: 'subscriptions', value: 'SUBSCRIPTIONS', label: '📺 Subscripciones' },
   {
-    key: 'savings/investments',
-    value: 'SAVINGS/INVESTMENTS',
-    label: '💰 Ahooro / Inversiones',
+    key: 'savings',
+    value: 'SAVINGS',
+    label: '💰 Ahorro / Inversiones',
   },
   { key: 'education', value: 'EDUCATION', label: '📚 Educación' },
   { key: 'travel', value: 'TRAVEL', label: '✈️ Viajes' },
