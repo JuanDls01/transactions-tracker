@@ -4,13 +4,18 @@ import { DataTable } from '@/ui/components/data-table';
 import Link from 'next/link';
 import { transactionColumns } from '../ui/components/transaction-columns';
 import { parseDecimalToString } from '@/utils/numbers';
+import { firstDateOfMonth, lastDateOfMonth } from '@/utils/dates';
+import ExpensesChart from '@/ui/components/expenses-chart';
 
 const Home = async () => {
-  const { balanceByCurrency, recentTransactions } = await getAccountSummary();
-  const formattedTransactions = recentTransactions.map((t) => ({
-    ...t,
-    amount: parseDecimalToString(t.amount),
+  const { balanceByCurrency, monthlyExpenses, lastTransactions } = await getAccountSummary();
+
+  const totalExpenses = monthlyExpenses.reduce((acc, curr) => acc + Number(curr.amount ?? 0), 0);
+  const parsedExpenses = monthlyExpenses.map((exp) => ({
+    ...exp,
+    amount: Number(exp.amount),
   }));
+
   return (
     <main className='space-y-5'>
       {Object.keys(balanceByCurrency).map((key) => (
@@ -22,6 +27,7 @@ const Home = async () => {
           <CardDescription className='text-xs'>+20.1% from last month</CardDescription>
         </Card>
       ))}
+      <ExpensesChart chartData={parsedExpenses} total={totalExpenses.toLocaleString()} />
       <Card className='border-none'>
         <CardHeader>
           <CardTitle>Transacciones recientes</CardTitle>
@@ -31,7 +37,7 @@ const Home = async () => {
           </CardDescription>
         </CardHeader>
         <CardContent className='p-0 sm:p-0'>
-          <DataTable columns={transactionColumns} data={formattedTransactions} />
+          <DataTable columns={transactionColumns} data={lastTransactions} />
         </CardContent>
       </Card>
     </main>
@@ -41,23 +47,37 @@ const Home = async () => {
 const getAccountSummary = async () => {
   try {
     const user = await prismaDb.user.findFirst();
-    const [incomesByCurrency, expensesByCurrency, recentTransactions] = await Promise.all([
-      prismaDb.transaction.groupBy({
-        by: ['currency'],
-        where: { authorId: user?.id, type: 'INCOME' },
-        _sum: { amount: true },
-      }),
-      prismaDb.transaction.groupBy({
-        by: ['currency'],
-        where: { authorId: user?.id, type: 'EXPENSE' },
-        _sum: { amount: true },
-      }),
-      prismaDb.transaction.findMany({
-        where: { authorId: user?.id },
-        orderBy: { createdAt: 'desc' },
-        take: 5,
-      }),
-    ]);
+    const [incomesByCurrency, expensesByCurrency, lastTransactions, monthlyExpensesByCategory] =
+      await Promise.all([
+        prismaDb.transaction.groupBy({
+          by: ['currency'],
+          where: { authorId: user?.id, type: 'INCOME' },
+          _sum: { amount: true },
+        }),
+        prismaDb.transaction.groupBy({
+          by: ['currency'],
+          where: { authorId: user?.id, type: 'EXPENSE' },
+          _sum: { amount: true },
+        }),
+        prismaDb.transaction.findMany({
+          where: { authorId: user?.id },
+          orderBy: { createdAt: 'desc' },
+          take: 5,
+        }),
+        prismaDb.transaction.groupBy({
+          by: ['category'],
+          where: {
+            authorId: user?.id,
+            type: 'EXPENSE',
+            currency: 'ARS',
+            createdAt: {
+              gte: firstDateOfMonth(),
+              lte: lastDateOfMonth(),
+            },
+          },
+          _sum: { amount: true },
+        }),
+      ]);
 
     const balanceByCurrency: Record<string, number> = {};
 
@@ -77,7 +97,21 @@ const getAccountSummary = async () => {
       balanceByCurrency[currency] = (balanceByCurrency[currency] || 0) - Number(amount ?? 0);
     });
 
-    return { balanceByCurrency, recentTransactions };
+    const formattedTransactions = lastTransactions.map((t) => ({
+      ...t,
+      amount: parseDecimalToString(t.amount),
+    }));
+
+    const formattedExpenses = monthlyExpensesByCategory.map((exp) => ({
+      category: exp.category,
+      amount: exp._sum.amount ?? 0,
+    }));
+
+    return {
+      balanceByCurrency,
+      lastTransactions: formattedTransactions,
+      monthlyExpenses: formattedExpenses,
+    };
   } catch (error) {
     console.error('Error scanning items:', error);
     throw error;
