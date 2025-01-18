@@ -18,7 +18,7 @@ const categoryLabels = {
   HEALTH: '🩺 Salud',
   HOME: '🏠 Hogar',
   SUBSCRIPTIONS: '📺 Subscripciones',
-  SAVINGS: '💰 Ahooro / Inversiones',
+  SAVINGS: '💰 Ahorro / Inversiones',
   EDUCATION: '📚 Educación',
   TRAVEL: '✈️ Viajes',
   WORK: '💼 Trabajo',
@@ -26,7 +26,7 @@ const categoryLabels = {
   MISCELLANEOUS: '🧩 Otro',
 };
 
-export const columns: ColumnDef<Transaction>[] = [
+export const transactionColumns: ColumnDef<Omit<Transaction, 'amount'> & { amount: string }>[] = [
   {
     id: 'amount',
     header: () => <p className='text-left'>Monto</p>,
@@ -34,7 +34,7 @@ export const columns: ColumnDef<Transaction>[] = [
       const { amount, currency, type } = row.original;
       return (
         <div
-          className={`text-right font-medium pr-4`}
+          className={`text-right font-medium pr-2`}
         >{`${type === 'INCOME' ? '+' : '-'} $${amount} ${currency}`}</div>
       );
     },
