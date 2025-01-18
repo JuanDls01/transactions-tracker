@@ -18,7 +18,7 @@ const MovementsPage = async () => {
   );
 };
 
-export const getTransactions = async () => {
+const getTransactions = async () => {
   try {
     const transactions = await prismaDb.transaction.findMany();
     return transactions;
