@@ -30,7 +30,7 @@ const Home = async () => {
             <Link href={'/movements'}>Ve el listado completo aquí</Link>
           </CardDescription>
         </CardHeader>
-        <CardContent className='pt-0 sm:p-0'>
+        <CardContent className='p-0 sm:p-0'>
           <DataTable columns={transactionColumns} data={formattedTransactions} />
         </CardContent>
       </Card>

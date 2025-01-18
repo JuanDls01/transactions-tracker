@@ -13,7 +13,7 @@ export const transactionCategoryOptions = [
   { key: 'travel', value: 'TRAVEL', label: '✈️ Viajes' },
   { key: 'work', value: 'WORK', label: '💼 Trabajo' },
   { key: 'car', value: 'CAR', label: '🚗 Auto ' },
-  { key: 'miscellaneous', value: 'miscellaneous', label: '🧩 Otro' },
+  { key: 'miscellaneous', value: 'MISCELLANEOUS', label: '🧩 Otro' },
 ];
 
 export const transactionTypeOptions = [
