@@ -14,6 +14,7 @@ import { FormEvent, startTransition, useActionState, useRef } from 'react';
 import { onSubmitAction } from './actions';
 import { ActionResponse } from '@/types/actions';
 import { Currency, TransactionCategory, TransactionType } from '@prisma/client';
+import { IS_DECIMAL_NUMBER } from '@/utils/reg-exp';
 
 type TransactionFormSchema = z.output<typeof schema>;
 
@@ -99,7 +100,7 @@ const TransactionForm = () => {
             <div className='shrink-0 select-none text-base text-gray-500 sm:text-sm/6 w-1/12'>$</div>
             <input
               id='amount'
-              type='number'
+              type='string'
               aria-label='Monto'
               placeholder='0.00'
               className={clsx(
@@ -107,7 +108,16 @@ const TransactionForm = () => {
                 'border-none outline-none focus:outline-none focus:border-none',
                 '[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none',
               )}
-              {...register('amount', { valueAsNumber: true, required: true })}
+              {...register('amount', {
+                required: true,
+                pattern: IS_DECIMAL_NUMBER,
+                setValueAs: (value) => {
+                  if (typeof value === 'string') {
+                    return parseFloat(value.replace(',', '.'));
+                  }
+                  return value;
+                },
+              })}
             />
             <div className='grid shrink-0 grid-cols-1 focus-within:relative h-full w-3/12'>
               <select

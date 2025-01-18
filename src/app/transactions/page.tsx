@@ -1,14 +1,19 @@
 import prismaDb from '@/lib/prisma';
-import { columns } from './movements';
+import { transactionColumns } from '../../ui/components/transaction-columns';
 import { DataTable } from '../../ui/components/data-table';
+import { parseDecimalToString } from '@/utils/numbers';
 
 const MovementsPage = async () => {
   const transactions = await getTransactions();
   if (!transactions) return <h1>No transactions found</h1>;
+  const formattedTransactions = transactions.map((t) => ({
+    ...t,
+    amount: parseDecimalToString(t.amount),
+  }));
   return (
     <section className='flex flex-col space-y-4'>
       <h2>Registro de transacciones:</h2>
-      <DataTable columns={columns} data={transactions} />
+      <DataTable columns={transactionColumns} data={formattedTransactions} />
     </section>
   );
 };

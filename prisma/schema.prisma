@@ -18,7 +18,7 @@ model Transaction {
   id          Int                 @id @default(autoincrement())
   createdAt   DateTime            @default(now())
   updatedAt   DateTime            @updatedAt
-  amount      Int
+  amount      Decimal
   type        TransactionType     @default(INCOME)
   currency    Currency            @default(ARS)
   category    TransactionCategory

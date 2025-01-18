@@ -1,5 +1,7 @@
 'use client';
 
+import { Badge } from '@/ui/elements/badge';
+import { CardContent } from '@/ui/elements/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,41 +13,40 @@ import {
 import { EllipsisHorizontalIcon } from '@heroicons/react/16/solid';
 import { Transaction } from '@prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
+import { MinusCircle, PlusCircleIcon } from 'lucide-react';
 
 const categoryLabels = {
-  FOOD: '🍽️ Comida',
-  LEISURE: '🎮 Ocio',
-  HEALTH: '🩺 Salud',
-  HOME: '🏠 Hogar',
-  SUBSCRIPTIONS: '📺 Subscripciones',
-  SAVINGS: '💰 Ahooro / Inversiones',
-  EDUCATION: '📚 Educación',
-  TRAVEL: '✈️ Viajes',
-  WORK: '💼 Trabajo',
-  CAR: '🚗 Auto ',
-  MISCELLANEOUS: '🧩 Otro',
+  FOOD: 'Comida',
+  LEISURE: 'Ocio',
+  HEALTH: 'Salud',
+  HOME: 'Hogar',
+  SUBSCRIPTIONS: 'Subscripciones',
+  SAVINGS: 'Ahorro',
+  EDUCATION: 'Educación',
+  TRAVEL: 'Viajes',
+  WORK: 'Trabajo',
+  CAR: 'Auto',
+  MISCELLANEOUS: 'Otro',
 };
 
-export const columns: ColumnDef<Transaction>[] = [
+export const transactionColumns: ColumnDef<Omit<Transaction, 'amount'> & { amount: string }>[] = [
   {
     id: 'amount',
     header: () => <p className='text-left'>Monto</p>,
     cell: ({ row }) => {
-      const { amount, currency, type } = row.original;
+      const { amount, currency, type, category } = row.original;
       return (
-        <div
-          className={`text-right font-medium pr-4`}
-        >{`${type === 'INCOME' ? '+' : '-'} $${amount} ${currency}`}</div>
+        <CardContent className='p-0 sm:p-0 flex flex-row space-x-2'>
+          {type === 'INCOME' ? (
+            <PlusCircleIcon className='text-income w-4 h-auto' />
+          ) : (
+            <MinusCircle className='text-outcome w-4 h-auto' />
+          )}
+          <p>{`$${amount} ${currency}`}</p>
+
+          <Badge variant={'outline'}>{categoryLabels[category]}</Badge>
+        </CardContent>
       );
-    },
-  },
-  {
-    id: 'category',
-    header: () => <p className='text-left'>Categoría</p>,
-    cell: ({ row }) => {
-      const { category } = row.original;
-      const label = categoryLabels[category];
-      return <div>{`${label}`}</div>;
     },
   },
   {
@@ -58,7 +59,7 @@ export const columns: ColumnDef<Transaction>[] = [
         month: 'numeric',
         day: 'numeric',
       });
-      return <div>{`${formattedDate}`}</div>;
+      return <CardContent className='p-0 sm:p-0 text-xs'>{`${formattedDate}`}</CardContent>;
     },
   },
   {
@@ -75,7 +76,7 @@ export const columns: ColumnDef<Transaction>[] = [
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className='h-4 w-4 p-0 appearance-none outline-none'>
+            <button className='h-3 w-3 p-0 appearance-none outline-none'>
               <EllipsisHorizontalIcon />
             </button>
           </DropdownMenuTrigger>
