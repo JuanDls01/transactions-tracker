@@ -50,6 +50,8 @@ export default {
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))',
         },
+        income: 'hsl(var(--income))',
+        outcome: 'hsl(var(--outcome))',
       },
       borderRadius: {
         lg: 'var(--radius)',
