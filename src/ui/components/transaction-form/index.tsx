@@ -14,7 +14,8 @@ import { onSubmitAction } from './actions';
 import { ActionResponse } from '@/types/actions';
 import { Currency, TransactionCategory, TransactionType } from '@prisma/client';
 import { IS_DECIMAL_NUMBER } from '@/utils/reg-exp';
-import ButtonDeprecated from '@/ui/elements/ButtonDeprecated';
+import { Loader2 } from 'lucide-react';
+import { Button } from '@/ui/elements/button';
 
 type TransactionFormSchema = z.output<typeof schema>;
 
@@ -62,12 +63,7 @@ const TransactionForm = () => {
   };
 
   return (
-    <form
-      action={formAction}
-      onSubmit={onSubmit}
-      ref={formRef}
-      className='bg-white shadow-md max-w-sm rounded px-8 pt-6 pb-8 mb-4 space-y-2 sm:space-y-4'
-    >
+    <form action={formAction} onSubmit={onSubmit} ref={formRef}>
       <div className='space-y-1'>
         <Label>Movimiento</Label>
         <div className='flex space-x-2'>
@@ -167,7 +163,16 @@ const TransactionForm = () => {
         />
       </div>
       {state?.message && <p className='text-red-500'>{state.message}</p>}
-      <ButtonDeprecated type='submit'>{isPending ? 'Guardando...' : 'Guardar'}</ButtonDeprecated>
+      <Button type='submit' disabled={isPending}>
+        {isPending ? (
+          <>
+            <Loader2 className='animate-spin' />
+            Guardando...
+          </>
+        ) : (
+          'Guardar'
+        )}
+      </Button>
     </form>
   );
 };
