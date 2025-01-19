@@ -15,7 +15,7 @@ export const onSubmitAction = async (
     if (!parsed.success) {
       return {
         success: false,
-        message: 'Please fix the errors in the form',
+        message: 'Por favor corrija los errores del formulario',
         errors: parsed.error.flatten().fieldErrors,
         inputs: formData,
       };
@@ -49,7 +49,7 @@ export const onSubmitAction = async (
       },
     });
 
-    return { success: true, message: 'Transaction saved successfully!' };
+    return { success: true, message: 'Transacción guardada exitosamente!' };
   } catch (err) {
     console.error('Error adding item: ', err);
     return { success: false, message: 'An unexpected error ocurred' };

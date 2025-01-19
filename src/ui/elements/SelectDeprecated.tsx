@@ -5,7 +5,7 @@ type SelectPropsType = {
   errorMessage?: string;
 } & React.SelectHTMLAttributes<HTMLSelectElement>;
 
-const Select = ({ errorMessage, children, ...props }: SelectPropsType) => {
+const SelectDeprecated = ({ errorMessage, children, ...props }: SelectPropsType) => {
   return (
     <>
       <div className={clsx('grid grid-cols-1', 'min-w-0')}>
@@ -35,4 +35,4 @@ const Select = ({ errorMessage, children, ...props }: SelectPropsType) => {
   );
 };
 
-export default Select;
+export default SelectDeprecated;

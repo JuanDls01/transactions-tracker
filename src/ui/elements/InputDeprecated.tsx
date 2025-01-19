@@ -4,7 +4,7 @@ type InputPropsType = {
   errorMessage?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
-const Input = ({ errorMessage, ...props }: InputPropsType) => {
+const InputDeprecated = ({ errorMessage, ...props }: InputPropsType) => {
   return (
     <>
       <input
@@ -13,7 +13,9 @@ const Input = ({ errorMessage, ...props }: InputPropsType) => {
           'text-gray-900 sm:text-sm/6 text-base',
           'rounded-md outline outline-1 -outline-offset-1',
           'focus:outline focus:outline-2 focus:-outline-offset-2 ',
-          errorMessage ? 'outline-red-500 focus:outline-red-500' : 'outline-gray-300 focus:outline-indigo-600',
+          errorMessage
+            ? 'outline-red-500 focus:outline-red-500'
+            : 'outline-gray-300 focus:outline-indigo-600',
         )}
         {...props}
       />
@@ -26,4 +28,4 @@ const Input = ({ errorMessage, ...props }: InputPropsType) => {
   );
 };
 
-export default Input;
+export default InputDeprecated;

@@ -1,12 +1,19 @@
 import TransactionForm from '@/ui/components/transaction-form';
-import { CardTitle } from '@/ui/elements/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/ui/elements/card';
 
 const NewTransactionPage = () => {
   return (
-    <>
-      <CardTitle className='pb-4'>Registrar transacción</CardTitle>
-      <TransactionForm />
-    </>
+    <section className='flex py-6 justify-center'>
+      <Card className='border-none w-full max-w-sm'>
+        <CardHeader>
+          <CardTitle>Registrar transacción</CardTitle>
+          <CardDescription>Aquí puedes registrar tus transacciones</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <TransactionForm />
+        </CardContent>
+      </Card>
+    </section>
   );
 };
 

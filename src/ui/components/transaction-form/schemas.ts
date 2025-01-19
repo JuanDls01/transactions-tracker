@@ -6,13 +6,16 @@ export const schema = z.object({
     (value) => (typeof value === 'string' ? parseFloat(value) : value),
     z
       .number({
-        required_error: 'required field',
-        invalid_type_error: 'Es necesario ingresar un monto',
+        message: 'Es necesario ingresar un monto',
       })
-      .positive(),
+      .positive({
+        message: 'El valor ingresado debe ser positivo',
+      }),
   ),
   type: z.nativeEnum(TransactionType),
   currency: z.nativeEnum(Currency),
-  category: z.nativeEnum(TransactionCategory),
+  category: z.nativeEnum(TransactionCategory, {
+    message: 'Es necesario ingresar una categoría del listado',
+  }),
   description: z.string().optional(),
 });
