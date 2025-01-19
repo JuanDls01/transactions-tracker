@@ -11,7 +11,7 @@ import { Currency, TransactionType } from '@prisma/client';
 import { CheckCircle2, Loader2 } from 'lucide-react';
 import { Button } from '@/ui/elements/button';
 import { Textarea } from '@/ui/elements/textarea';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/ui/elements/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/ui/elements/select';
 import { Input } from '@/ui/elements/input';
 import { Label } from '@/ui/elements/label';
