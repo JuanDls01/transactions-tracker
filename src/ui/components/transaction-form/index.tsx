@@ -2,7 +2,6 @@
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import Label from '../../elements/Label';
 import Select from '../../elements/Select';
-import TextAreaDeprecated from '../../elements/TextAreaDeprecated';
 import { clsx } from 'clsx';
 import { useForm } from 'react-hook-form';
 import { currencyOptions, transactionCategoryOptions, transactionTypeOptions } from './consts';
@@ -16,6 +15,7 @@ import { Currency, TransactionCategory, TransactionType } from '@prisma/client';
 import { IS_DECIMAL_NUMBER } from '@/utils/reg-exp';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/ui/elements/button';
+import { Textarea } from '@/ui/elements/textarea';
 
 type TransactionFormSchema = z.output<typeof schema>;
 
@@ -63,7 +63,7 @@ const TransactionForm = () => {
   };
 
   return (
-    <form action={formAction} onSubmit={onSubmit} ref={formRef}>
+    <form action={formAction} onSubmit={onSubmit} ref={formRef} className='space-y-4'>
       <div className='space-y-1'>
         <Label>Movimiento</Label>
         <div className='flex space-x-2'>
@@ -155,12 +155,12 @@ const TransactionForm = () => {
       </div>
       <div className='space-y-1'>
         <Label htmlFor='description'>Descripción</Label>
-        <TextAreaDeprecated
-          id='description'
-          placeholder='Escribe una breve descripción'
-          {...register('description')}
-          errorMessage={errors.description?.message}
-        />
+        <Textarea id='description' placeholder='Escribe una breve descripción' {...register('description')} />
+        {errors.description?.message && (
+          <p role='alert' className='text-red-500 text-xs italic'>
+            {errors.description?.message}
+          </p>
+        )}
       </div>
       {state?.message && <p className='text-red-500'>{state.message}</p>}
       <Button type='submit' disabled={isPending}>
