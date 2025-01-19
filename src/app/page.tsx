@@ -40,8 +40,10 @@ const Home = async () => {
         <CardHeader>
           <CardTitle>Transacciones recientes</CardTitle>
           <CardDescription>
-            Estas son tus últimas transacciones.
-            <Link href={'/movements'}>Ve el listado completo aquí</Link>
+            Estas son tus últimas transacciones. Ve el listado completo
+            <Link href={'/transactions'} className='underline underline-offset-4'>
+              aquí
+            </Link>
           </CardDescription>
         </CardHeader>
         <CardContent className='p-0 sm:p-0'>
