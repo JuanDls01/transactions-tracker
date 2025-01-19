@@ -9,12 +9,12 @@ import { currencyOptions, transactionCategoryOptions, transactionTypeOptions } f
 import { zodResolver } from '@hookform/resolvers/zod';
 import { schema } from './schemas';
 import { z } from 'zod';
-import Button from '@/ui/elements/Button';
 import { FormEvent, startTransition, useActionState, useRef } from 'react';
 import { onSubmitAction } from './actions';
 import { ActionResponse } from '@/types/actions';
 import { Currency, TransactionCategory, TransactionType } from '@prisma/client';
 import { IS_DECIMAL_NUMBER } from '@/utils/reg-exp';
+import ButtonDeprecated from '@/ui/elements/ButtonDeprecated';
 
 type TransactionFormSchema = z.output<typeof schema>;
 
@@ -167,7 +167,7 @@ const TransactionForm = () => {
         />
       </div>
       {state?.message && <p className='text-red-500'>{state.message}</p>}
-      <Button type='submit'>{isPending ? 'Guardando...' : 'Guardar'}</Button>
+      <ButtonDeprecated type='submit'>{isPending ? 'Guardando...' : 'Guardar'}</ButtonDeprecated>
     </form>
   );
 };
