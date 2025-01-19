@@ -3,8 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/ui/
 
 const NewTransactionPage = () => {
   return (
-    <section className='flex'>
-      <Card className='border-none'>
+    <section className='flex py-6 justify-center'>
+      <Card className='border-none w-full max-w-sm'>
         <CardHeader>
           <CardTitle>Registrar transacción</CardTitle>
           <CardDescription>Aquí puedes registrar tus transacciones</CardDescription>
