@@ -1,6 +1,6 @@
 'use client';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
-import Label from '../../elements/Label';
+import LabelDeprecated from '../../elements/LabelDeprecated';
 import Select from '../../elements/Select';
 import { clsx } from 'clsx';
 import { useForm } from 'react-hook-form';
@@ -65,7 +65,7 @@ const TransactionForm = () => {
   return (
     <form action={formAction} onSubmit={onSubmit} ref={formRef} className='space-y-4'>
       <div className='space-y-1'>
-        <Label>Movimiento</Label>
+        <LabelDeprecated>Movimiento</LabelDeprecated>
         <div className='flex space-x-2'>
           <select
             id='type'
@@ -142,7 +142,7 @@ const TransactionForm = () => {
         </p>
       </div>
       <div className='space-y-1'>
-        <Label htmlFor='category'>Categoría</Label>
+        <LabelDeprecated htmlFor='category'>Categoría</LabelDeprecated>
         <Select {...register('category', { required: true })} errorMessage={errors.category?.message}>
           {transactionCategoryOptions.map((category) => {
             return (
@@ -154,7 +154,7 @@ const TransactionForm = () => {
         </Select>
       </div>
       <div className='space-y-1'>
-        <Label htmlFor='description'>Descripción</Label>
+        <LabelDeprecated htmlFor='description'>Descripción</LabelDeprecated>
         <Textarea id='description' placeholder='Escribe una breve descripción' {...register('description')} />
         {errors.description?.message && (
           <p role='alert' className='text-red-500 text-xs italic'>
