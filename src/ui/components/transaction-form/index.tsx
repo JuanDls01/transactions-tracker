@@ -2,7 +2,7 @@
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import Label from '../../elements/Label';
 import Select from '../../elements/Select';
-import TeaxtArea from '../../elements/TextArea';
+import TextAreaDeprecated from '../../elements/TextAreaDeprecated';
 import { clsx } from 'clsx';
 import { useForm } from 'react-hook-form';
 import { currencyOptions, transactionCategoryOptions, transactionTypeOptions } from './consts';
@@ -155,7 +155,7 @@ const TransactionForm = () => {
       </div>
       <div className='space-y-1'>
         <Label htmlFor='description'>Descripción</Label>
-        <TeaxtArea
+        <TextAreaDeprecated
           id='description'
           placeholder='Escribe una breve descripción'
           {...register('description')}

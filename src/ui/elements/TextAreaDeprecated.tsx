@@ -4,7 +4,7 @@ type TextAreaPropsType = {
   errorMessage?: string;
 } & React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 
-const TeaxtArea = ({ errorMessage, ...props }: TextAreaPropsType) => {
+const TextAreaDeprecated = ({ errorMessage, ...props }: TextAreaPropsType) => {
   return (
     <>
       <textarea
@@ -25,4 +25,4 @@ const TeaxtArea = ({ errorMessage, ...props }: TextAreaPropsType) => {
   );
 };
 
-export default TeaxtArea;
+export default TextAreaDeprecated;
