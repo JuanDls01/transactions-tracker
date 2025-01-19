@@ -65,7 +65,7 @@ type ExpensesChartPropsType = {
 
 const ExpensesChart = ({ chartData, total }: ExpensesChartPropsType) => {
   return (
-    <Card className='border-none'>
+    <Card className='border-none py-6'>
       <CardHeader>
         <CardTitle>Gastos del mes</CardTitle>
         <CardDescription>Estos son tus gastos del mes, por categoría y en pesos ARS</CardDescription>

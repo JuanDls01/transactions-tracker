@@ -17,18 +17,26 @@ const Home = async () => {
   }));
 
   return (
-    <main className='space-y-5'>
-      {Object.keys(balanceByCurrency).map((key) => (
-        <Card key={key} className='p-2 sm:p-6 rounded-lg'>
-          <CardContent className='text-sm p-0 sm:p-0 pb-2 sm:pb-2'>Total de {key}</CardContent>
-          <CardTitle className='text-2xl font-bold'>
-            ${parseDecimalToString(balanceByCurrency[key])} {key}
-          </CardTitle>
-          <CardDescription className='text-xs'>+20.1% from last month</CardDescription>
-        </Card>
-      ))}
+    <main>
+      <div className='py-6'>
+        <h1 className='text-3xl sm:text-4xl font-bold pt-4 sm:pt-6'>Resumen de cuenta</h1>
+        <p className='text-base sm:text-lg text-muted-foreground'>
+          Aquí encontraras un resumen de tus gastos
+        </p>
+      </div>
+      <div className='space-y-4'>
+        {Object.keys(balanceByCurrency).map((key) => (
+          <Card key={key} className='p-2 sm:p-6 rounded-lg'>
+            <CardContent className='text-sm p-0 sm:p-0 pb-2 sm:pb-2'>Total de {key}</CardContent>
+            <CardTitle className='text-2xl font-bold'>
+              ${parseDecimalToString(balanceByCurrency[key])} {key}
+            </CardTitle>
+            <CardDescription className='text-xs'>+20.1% from last month</CardDescription>
+          </Card>
+        ))}
+      </div>
       <ExpensesChart chartData={parsedExpenses} total={totalExpenses.toLocaleString()} />
-      <Card className='border-none'>
+      <Card className='border-none py-6'>
         <CardHeader>
           <CardTitle>Transacciones recientes</CardTitle>
           <CardDescription>
