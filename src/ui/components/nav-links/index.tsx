@@ -15,7 +15,7 @@ const NavLinks = ({ links }: NavLinksPropsType) => {
         <Link
           key={l.href}
           href={l.href}
-          className={`${pathname === l.href ? 'text-white font-medium' : 'text-muted-foreground font-light'}`}
+          className={`text-sm sm:text-base ${pathname === l.href ? 'text-white font-medium' : 'text-muted-foreground font-light'}`}
         >
           {l.label}
         </Link>
