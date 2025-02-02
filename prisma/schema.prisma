@@ -24,7 +24,7 @@ model Transaction {
   category    TransactionCategory
   description String?
   author      User                @relation(fields: [authorId], references: [id])
-  authorId  Int
+  authorId    String
 }
 
 enum TransactionCategory {
@@ -53,16 +53,43 @@ enum TransactionType {
   EXPENSE
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
+// Auth.js differentiates between users and accounts. A user can have multiple accounts. An account is created for ech provider type
+// the user signs in with for the first time. If a user signs in with Google and then with Facebook, they will have two accounts, one for 
+// each provider.
 model User {
-  id            Int           @id @default(autoincrement())
-  email         String        @unique
+  id            String        @id @default(cuid())
   name          String?
-  password      String
+  email         String        @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  password      String?
   role          Role          @default(USER)
   transactions  Transaction[]
 }
 
-enum Role {
-  USER
-  ADMIN
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@id([provider, providerAccountId])
 }
