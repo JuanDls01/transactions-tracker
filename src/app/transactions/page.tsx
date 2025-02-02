@@ -1,4 +1,4 @@
-import prismaDb from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
 import { transactionColumns } from '../../ui/components/transaction-columns';
 import { DataTable } from '../../ui/components/data-table';
 import { parseDecimalToString } from '@/utils/numbers';
@@ -55,15 +55,15 @@ const DEFAULT_PAGE_SIZE = 10;
 
 const getTransactions = async (currentPage: number) => {
   try {
-    const user = await prismaDb.user.findFirst();
+    const user = await prisma.user.findFirst();
     const [transactions, totalRecords] = await Promise.all([
-      prismaDb.transaction.findMany({
+      prisma.transaction.findMany({
         where: { authorId: user?.id },
         orderBy: { createdAt: 'desc' },
         skip: DEFAULT_PAGE_SIZE * (currentPage - 1),
         take: DEFAULT_PAGE_SIZE,
       }),
-      prismaDb.transaction.count({
+      prisma.transaction.count({
         where: {
           authorId: user?.id,
         },

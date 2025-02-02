@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/ui/elements/card';
-import prismaDb from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
 import { DataTable } from '@/ui/components/data-table';
 import Link from 'next/link';
 import { transactionColumns } from '../../ui/components/transaction-columns';
@@ -56,25 +56,25 @@ const DashboardPage = async () => {
 
 const getAccountSummary = async () => {
   try {
-    const user = await prismaDb.user.findFirst();
+    const user = await prisma.user.findFirst();
     const [incomesByCurrency, expensesByCurrency, lastTransactions, monthlyExpensesByCategory] =
       await Promise.all([
-        prismaDb.transaction.groupBy({
+        prisma.transaction.groupBy({
           by: ['currency'],
           where: { authorId: user?.id, type: 'INCOME' },
           _sum: { amount: true },
         }),
-        prismaDb.transaction.groupBy({
+        prisma.transaction.groupBy({
           by: ['currency'],
           where: { authorId: user?.id, type: 'EXPENSE' },
           _sum: { amount: true },
         }),
-        prismaDb.transaction.findMany({
+        prisma.transaction.findMany({
           where: { authorId: user?.id },
           orderBy: { createdAt: 'desc' },
           take: 5,
         }),
-        prismaDb.transaction.groupBy({
+        prisma.transaction.groupBy({
           by: ['category'],
           where: {
             authorId: user?.id,
