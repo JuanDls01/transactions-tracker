@@ -1,4 +1,4 @@
-import prismaDb from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
 import { transactionColumns } from '../../ui/components/transaction-columns';
 import { DataTable } from '../../ui/components/data-table';
 import { parseDecimalToString } from '@/utils/numbers';
@@ -11,6 +11,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/ui/elements/pagination';
+import { auth } from '../auth';
 
 const MovementsPage = async (props: {
   searchParams?: Promise<{
@@ -55,17 +56,18 @@ const DEFAULT_PAGE_SIZE = 10;
 
 const getTransactions = async (currentPage: number) => {
   try {
-    const user = await prismaDb.user.findFirst();
+    const session = await auth();
+    const userId = session?.user?.id;
     const [transactions, totalRecords] = await Promise.all([
-      prismaDb.transaction.findMany({
-        where: { authorId: user?.id },
+      prisma.transaction.findMany({
+        where: { authorId: userId },
         orderBy: { createdAt: 'desc' },
         skip: DEFAULT_PAGE_SIZE * (currentPage - 1),
         take: DEFAULT_PAGE_SIZE,
       }),
-      prismaDb.transaction.count({
+      prisma.transaction.count({
         where: {
-          authorId: user?.id,
+          authorId: userId,
         },
       }),
     ]);

@@ -2,13 +2,18 @@
 import { schema } from './schemas';
 import { TransactionCategory } from '@/types/transactions';
 import { ActionResponse } from '@/types/actions';
-import prismaDb from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
+import { auth } from '@/app/auth';
 
 export const onSubmitAction = async (
   _: ActionResponse<typeof schema> | null,
   data: FormData,
 ): Promise<ActionResponse<typeof schema>> => {
   try {
+    const session = await auth();
+    if (!session || !session.user) {
+      return { success: false, message: 'Usuario no autenticado' };
+    }
     const formData = Object.fromEntries(data);
     const parsed = schema.safeParse(formData);
 
@@ -30,11 +35,9 @@ export const onSubmitAction = async (
 
     const { amount, category, description, currency, type } = parsed.data;
 
-    // Create an ID for the item to be created
+    const userId = session.user.id;
 
-    const user = await prismaDb.user.findFirst();
-
-    await prismaDb.transaction.create({
+    await prisma.transaction.create({
       data: {
         type,
         amount,
@@ -43,7 +46,7 @@ export const onSubmitAction = async (
         currency,
         author: {
           connect: {
-            id: user?.id,
+            id: userId,
           },
         },
       },
