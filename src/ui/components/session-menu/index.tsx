@@ -14,16 +14,15 @@ import { links } from '../navbar';
 import { User } from 'next-auth';
 
 type SessionMenuProps = {
-  user: User;
+  user?: User;
 };
 
 const SessionMenu = ({ user }: SessionMenuProps) => {
-  console.log({ user });
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant='outline' className='flex items-center justify-center'>
-          <p>{user.name}</p>
+          <p>{user?.name}</p>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>

@@ -12,8 +12,7 @@ export const authOptions = {
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID ?? '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
-      profile(profile, tokens) {
-        console.log('profile: ', profile, tokens);
+      profile(profile) {
         return {
           id: profile.sub,
           name: profile.name,

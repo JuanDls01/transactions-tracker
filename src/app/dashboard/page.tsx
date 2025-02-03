@@ -6,6 +6,7 @@ import { transactionColumns } from '../../ui/components/transaction-columns';
 import { parseDecimalToString } from '@/utils/numbers';
 import { firstDateOfMonth, lastDateOfMonth } from '@/utils/dates';
 import ExpensesChart from '@/ui/components/expenses-chart';
+import { auth } from '../auth';
 
 const DashboardPage = async () => {
   const { balanceByCurrency, monthlyExpenses, lastTransactions } = await getAccountSummary();
@@ -40,7 +41,7 @@ const DashboardPage = async () => {
         <CardHeader>
           <CardTitle>Transacciones recientes</CardTitle>
           <CardDescription>
-            Estas son tus últimas transacciones. Ve el listado completo
+            Estas son tus últimas transacciones. Ve el listado completo{' '}
             <Link href={'/transactions'} className='underline underline-offset-4'>
               aquí
             </Link>
@@ -56,28 +57,30 @@ const DashboardPage = async () => {
 
 const getAccountSummary = async () => {
   try {
-    const user = await prisma.user.findFirst();
+    const session = await auth();
+    const userId = session?.user?.id;
+
     const [incomesByCurrency, expensesByCurrency, lastTransactions, monthlyExpensesByCategory] =
       await Promise.all([
         prisma.transaction.groupBy({
           by: ['currency'],
-          where: { authorId: user?.id, type: 'INCOME' },
+          where: { authorId: userId, type: 'INCOME' },
           _sum: { amount: true },
         }),
         prisma.transaction.groupBy({
           by: ['currency'],
-          where: { authorId: user?.id, type: 'EXPENSE' },
+          where: { authorId: userId, type: 'EXPENSE' },
           _sum: { amount: true },
         }),
         prisma.transaction.findMany({
-          where: { authorId: user?.id },
+          where: { authorId: userId },
           orderBy: { createdAt: 'desc' },
           take: 5,
         }),
         prisma.transaction.groupBy({
           by: ['category'],
           where: {
-            authorId: user?.id,
+            authorId: userId,
             type: 'EXPENSE',
             currency: 'ARS',
             createdAt: {
