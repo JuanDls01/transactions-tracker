@@ -1,36 +1,25 @@
-import { signIn } from '@/app/auth';
-import NavLinks from '../nav-links';
+import { auth } from '@/app/auth';
+import SessionMenu from '../session-menu';
+import SignInButton from '../signin-button';
 
 export const links = [
-  { href: '/', label: 'Inicio' },
+  { href: '/dashboard', label: 'Dashboard' },
   { href: '/transactions', label: 'Transacciones' },
   { href: '/transactions/new', label: 'Cargar' },
 ];
 
-const Navbar = () => {
+const Navbar = async () => {
+  const session = await auth();
+
   return (
     <div className='flex justify-center h-12 w-full'>
       <div className='container flex justify-end'>
         <div className='flex space-x-4 items-center'>
-          <NavLinks links={links} />
-          <SignIn />
+          {session ? <SessionMenu user={session.user} /> : <SignInButton />}
         </div>
       </div>
     </div>
   );
 };
-
-export function SignIn() {
-  return (
-    <form
-      action={async () => {
-        'use server';
-        await signIn('google', { redirectTo: '/dashboard' });
-      }}
-    >
-      <button type='submit'>Signin with Google</button>
-    </form>
-  );
-}
 
 export default Navbar;
