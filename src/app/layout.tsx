@@ -1,10 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import Navbar from '@/ui/components/navbar';
 import clsx from 'clsx';
-import Link from 'next/link';
-import { CardDescription } from '@/ui/elements/card';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -35,24 +32,7 @@ export default function RootLayout({
             'font-[family-name:var(--font-geist-sans)]',
           )}
         >
-          <header className='border-grid sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
-            <Navbar />
-          </header>
-          <main className='container'>{children}</main>
-          <footer className='flex gap-6 items-center justify-center border-grid border-t w-full'>
-            <div className='container py-6'>
-              <CardDescription className='text-center'>
-                Created with ❤️ by{' '}
-                <Link
-                  href='https://github.com/JuanDls01'
-                  target='_blank'
-                  className='underline underline-offset-4'
-                >
-                  JuanDls01
-                </Link>
-              </CardDescription>
-            </div>
-          </footer>
+          {children}
         </div>
       </body>
     </html>

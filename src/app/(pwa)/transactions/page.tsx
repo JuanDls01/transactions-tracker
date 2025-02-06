@@ -1,6 +1,4 @@
 import { prisma } from '@/lib/prisma';
-import { transactionColumns } from '../../ui/components/transaction-columns';
-import { DataTable } from '../../ui/components/data-table';
 import { parseDecimalToString } from '@/utils/numbers';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/ui/elements/card';
 import Link from 'next/link';
@@ -11,7 +9,9 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/ui/elements/pagination';
-import { auth } from '../auth';
+import { DataTable } from '@/ui/components/data-table';
+import { transactionColumns } from '@/ui/components/transaction-columns';
+import { auth } from '@/app/auth';
 
 const MovementsPage = async (props: {
   searchParams?: Promise<{
