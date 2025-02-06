@@ -4,6 +4,7 @@ import { TransactionCategory } from '@/types/transactions';
 import { ActionResponse } from '@/types/actions';
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/app/auth';
+import { revalidatePath } from 'next/cache';
 
 export const onSubmitAction = async (
   _: ActionResponse<typeof schema> | null,
@@ -51,6 +52,8 @@ export const onSubmitAction = async (
         },
       },
     });
+
+    revalidatePath('/transactions');
 
     return { success: true, message: 'Transacción guardada exitosamente!' };
   } catch (err) {
