@@ -1,6 +1,7 @@
 'use client';
 
 import { Badge } from '@/ui/elements/badge';
+import { Button } from '@/ui/elements/button';
 import { CardContent } from '@/ui/elements/card';
 import {
   DropdownMenu,
@@ -14,6 +15,7 @@ import { EllipsisHorizontalIcon } from '@heroicons/react/16/solid';
 import { Transaction } from '@prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
 import { MinusCircle, PlusCircleIcon } from 'lucide-react';
+import DeleteTransactionBttn from './components/delete-transaction-bttn';
 
 const categoryLabels = {
   FOOD: 'Comida',
@@ -36,15 +38,20 @@ export const transactionColumns: ColumnDef<Omit<Transaction, 'amount'> & { amoun
     cell: ({ row }) => {
       const { amount, currency, type, category } = row.original;
       return (
-        <CardContent className='p-0 sm:p-0 flex flex-row space-x-2'>
+        <CardContent className='p-0 sm:p-0 flex flex-row items-center space-x-2'>
           {type === 'INCOME' ? (
             <PlusCircleIcon className='text-income w-4 h-auto' />
           ) : (
             <MinusCircle className='text-outcome w-4 h-auto' />
           )}
-          <p>{`$${amount} ${currency}`}</p>
+          <p>{`$${amount}`}</p>
+          <span>
+            <p className='text-xs flex items-center h-5'>{currency}</p>
+          </span>
 
-          <Badge variant={'outline'}>{categoryLabels[category]}</Badge>
+          <Badge variant={'outline'}>
+            <p className='max-w-12 overflow-hidden text-ellipsis'>{categoryLabels[category]}</p>
+          </Badge>
         </CardContent>
       );
     },
@@ -72,19 +79,21 @@ export const transactionColumns: ColumnDef<Omit<Transaction, 'amount'> & { amoun
   },
   {
     id: 'actions',
-    cell: () => {
+    cell: ({ row }) => {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className='h-3 w-3 p-0 appearance-none outline-none'>
+            <Button className='w-8 h-auto' variant='ghost'>
               <EllipsisHorizontalIcon />
-            </button>
+            </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end'>
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Editar</DropdownMenuItem>
-            <DropdownMenuItem>Eliminar</DropdownMenuItem>
+            <DropdownMenuItem>
+              <DeleteTransactionBttn transactionId={row.original.id} />
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

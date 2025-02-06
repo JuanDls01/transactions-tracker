@@ -10,8 +10,8 @@ import {
   PaginationPrevious,
 } from '@/ui/elements/pagination';
 import { DataTable } from '@/ui/components/data-table';
-import { transactionColumns } from '@/ui/components/transaction-columns';
 import { auth } from '@/app/auth';
+import { transactionColumns } from './transaction-columns';
 
 const MovementsPage = async (props: {
   searchParams?: Promise<{
