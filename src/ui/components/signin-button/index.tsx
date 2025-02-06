@@ -1,14 +1,9 @@
-import { signIn } from '@/app/auth';
 import { Button } from '@/ui/elements/button';
+import { signInAction } from './actions';
 
 const SignInButton = () => {
   return (
-    <form
-      action={async () => {
-        'use server';
-        await signIn('google', { redirectTo: '/dashboard' });
-      }}
-    >
+    <form action={signInAction}>
       <Button type='submit' variant='outline'>
         Iniciar Sesión
       </Button>

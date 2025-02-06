@@ -2,11 +2,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/ui/
 import { prisma } from '@/lib/prisma';
 import { DataTable } from '@/ui/components/data-table';
 import Link from 'next/link';
-import { transactionColumns } from '../../ui/components/transaction-columns';
+import { transactionColumns } from '../../../ui/components/transaction-columns';
 import { parseDecimalToString } from '@/utils/numbers';
 import { firstDateOfMonth, lastDateOfMonth } from '@/utils/dates';
 import ExpensesChart from '@/ui/components/expenses-chart';
-import { auth } from '../auth';
+import { auth } from '../../auth';
 
 const DashboardPage = async () => {
   const { balanceByCurrency, monthlyExpenses, lastTransactions } = await getAccountSummary();
