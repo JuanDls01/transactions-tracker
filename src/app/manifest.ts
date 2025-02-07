@@ -6,7 +6,7 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: 'TuChanchito',
     description:
       'Progressive Web App que te permite registrar, visualizar y gestionar tus gastos e ingresos.',
-    start_url: '/',
+    start_url: '/dashboard',
     display: 'standalone',
     background_color: '#2D3748',
     theme_color: '#000000',

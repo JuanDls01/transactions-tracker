@@ -18,7 +18,7 @@ const DashboardPage = async () => {
   }));
 
   return (
-    <main>
+    <>
       <div className='py-6'>
         <h1 className='text-3xl sm:text-4xl font-bold pt-4 sm:pt-6'>Resumen de cuenta</h1>
         <p className='text-base sm:text-lg text-muted-foreground'>
@@ -51,7 +51,7 @@ const DashboardPage = async () => {
           <DataTable columns={transactionColumns} data={lastTransactions} />
         </CardContent>
       </Card>
-    </main>
+    </>
   );
 };
 

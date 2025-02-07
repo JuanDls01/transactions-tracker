@@ -23,7 +23,7 @@ const MovementsPage = async (props: {
   const { transactions } = await getTransactions(currentPage);
   if (!transactions.length) return <h1>Aún no has registrado transacciones</h1>;
   return (
-    <main className='flex flex-col space-y-4'>
+    <div className='flex flex-col space-y-4'>
       <Card className='border-none py-6 space-y-4'>
         <CardHeader>
           <CardTitle>Registro de transacciones</CardTitle>
@@ -48,7 +48,7 @@ const MovementsPage = async (props: {
           </Pagination>
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 };
 

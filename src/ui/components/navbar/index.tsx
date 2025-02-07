@@ -10,7 +10,7 @@ const Navbar = async () => {
   return (
     <header
       className={clsx(
-        'w-full h-14',
+        'w-full',
         'flex items-center',
         'fixed bottom-0 sm:top-0 border-t sm:border-b',
         'bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60',
