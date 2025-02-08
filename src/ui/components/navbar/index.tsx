@@ -1,24 +1,17 @@
 import { auth } from '@/app/auth';
-import clsx from 'clsx';
-import MobileNav from './mobile-nav';
-import DesktopNav from './desktop-nav';
+import BottomNav from './bottom-nav';
+import TopNav from './top-nav';
 
 const Navbar = async () => {
   const session = await auth();
   if (!session || !session.user) return;
 
   return (
-    <header
-      className={clsx(
-        'w-full',
-        'flex items-center',
-        'fixed bottom-0 sm:top-0 border-t sm:border-b',
-        'bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60',
-      )}
-    >
-      <DesktopNav user={session.user} />
-      <MobileNav />
-    </header>
+    <>
+      <div className='absolute top-0 left-0 w-full h-14 bg-[#156359] opacity-20 blur-3xl -translate-y-1/2 sm:-translate-y-0'></div>
+      <TopNav user={session.user} />
+      <BottomNav />
+    </>
   );
 };
 
