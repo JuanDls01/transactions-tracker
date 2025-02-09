@@ -11,10 +11,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/ui/elements/dropdown-menu';
-import { EllipsisHorizontalIcon } from '@heroicons/react/16/solid';
 import { Transaction } from '@prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
-import { MinusCircle, PlusCircleIcon } from 'lucide-react';
+import { Ellipsis, MinusCircle, PlusCircleIcon } from 'lucide-react';
 import DeleteTransactionBttn from './components/delete-transaction-bttn';
 
 const categoryLabels = {
@@ -84,7 +83,7 @@ export const transactionColumns: ColumnDef<Omit<Transaction, 'amount'> & { amoun
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button className='w-8 h-auto' variant='ghost'>
-              <EllipsisHorizontalIcon />
+              <Ellipsis />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end'>
