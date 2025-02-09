@@ -29,6 +29,12 @@ const initialState: ActionResponse<TransactionFormSchema> = {
   message: '',
 };
 
+const defaultFormValues = {
+  type: TransactionType.INCOME,
+  currency: Currency.ARS,
+  amount: '',
+};
+
 const TransactionForm = () => {
   // Use Action State to handle server action and server validations
   // state: server action response
@@ -40,9 +46,7 @@ const TransactionForm = () => {
   const form = useForm<TransactionFormSchema>({
     resolver: zodResolver(schema),
     defaultValues: {
-      type: TransactionType.INCOME,
-      currency: Currency.ARS,
-      amount: '',
+      ...defaultFormValues,
       ...(state?.inputs ?? {}),
     },
     shouldUnregister: true,
@@ -73,10 +77,8 @@ const TransactionForm = () => {
   useEffect(() => {
     if (!isPending && state.success) {
       form.reset({
-        type: TransactionType.INCOME,
-        currency: Currency.ARS,
-        amount: '',
-        category: undefined,
+        ...defaultFormValues,
+        category: form.getValues('category'),
         description: '',
       });
     }
