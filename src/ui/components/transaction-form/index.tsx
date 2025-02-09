@@ -1,6 +1,6 @@
 'use client';
 import { useForm } from 'react-hook-form';
-import { currencyOptions, transactionCategoryOptions, transactionTypeOptions } from './consts';
+import { currencyOptions, transactionCategoryOptions } from './consts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { schema } from './schemas';
 import { z } from 'zod';
@@ -11,11 +11,14 @@ import { Currency, TransactionType } from '@prisma/client';
 import { CheckCircle2, Loader2 } from 'lucide-react';
 import { Button } from '@/ui/elements/button';
 import { Textarea } from '@/ui/elements/textarea';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/ui/elements/form';
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/ui/elements/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/ui/elements/select';
 import { Input } from '@/ui/elements/input';
-import { Label } from '@/ui/elements/label';
 import { Alert, AlertDescription } from '@/ui/elements/alert';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { cn } from '@/lib/utils';
+import clsx from 'clsx';
+import { Label } from '@/ui/elements/label';
 
 type TransactionFormSchema = Omit<z.output<typeof schema>, 'amount'> & {
   amount: string | number;
@@ -44,6 +47,8 @@ const TransactionForm = () => {
     },
     shouldUnregister: true,
   });
+
+  const { errors } = form.formState;
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -81,50 +86,73 @@ const TransactionForm = () => {
   return (
     <Form {...form}>
       <form action={formAction} onSubmit={onSubmit} ref={formRef} className='space-y-4 min-w-min'>
-        <div className='space-y-2'>
-          <Label
-            className={`${form.formState.errors.amount || form.formState.errors.type || form.formState.errors.currency ? 'text-destructive' : ''}`}
-          >
-            Movimiento
-          </Label>
-          <div className='flex space-x-2 ite w-full'>
-            <FormField
-              control={form.control}
-              name='type'
-              render={({ field }) => {
-                return (
-                  <FormItem className='w-1/6'>
-                    <Select onValueChange={field.onChange} defaultValue={field.value} {...field}>
-                      <FormControl className='py-1 px-2'>
-                        <SelectTrigger>
-                          <SelectValue placeholder='Tipo' />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {transactionTypeOptions.map((t) => {
-                          return (
-                            <SelectItem key={t.key} value={t.value}>
-                              {t.label}
-                            </SelectItem>
-                          );
-                        })}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
+        <FormField
+          control={form.control}
+          name='type'
+          render={({ field }) => (
+            <FormItem aria-label='Tipo de transacción'>
+              <FormControl>
+                <ToggleGroup
+                  type='single'
+                  onValueChange={(value) => {
+                    if (value) field.onChange(value);
+                  }}
+                  {...field}
+                >
+                  <ToggleGroupItem
+                    value={TransactionType.INCOME}
+                    className={cn(
+                      'w-24 p-1 rounded-full transition-all text-sm',
+                      field.value === TransactionType.INCOME
+                        ? 'bg-[#2FF76D] text-white font-bold'
+                        : 'bg-[#3DDC84]/20 text-[#3DDC84]',
+                    )}
+                  >
+                    INGRESO
+                  </ToggleGroupItem>
+                  <ToggleGroupItem
+                    value={TransactionType.EXPENSE}
+                    className={cn(
+                      'w-24 p-1 rounded-full transition-all text-sm',
+                      field.value === TransactionType.EXPENSE
+                        ? 'bg-[#B30C36] text-white font-bold hover:bg-[#B30C36]'
+                        : 'bg-[#B30C36]/20 hover:bg-[#B30C36]/20 hover:text-[#B30C36] text-[#B30C36]',
+                    )}
+                  >
+                    EGRESO
+                  </ToggleGroupItem>
+                  <Input type='hidden' {...field} />
+                </ToggleGroup>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <div>
+          <div className='flex items-center justify-center'>
+            <p className='text-2xl text-muted-foreground'>$</p>
             <FormField
               control={form.control}
               name='amount'
               defaultValue={undefined}
               render={({ field }) => (
-                <FormItem>
+                <FormItem aria-label='Monto'>
                   <FormControl>
-                    <Input placeholder='0.00' {...field} />
+                    <div className='flex items-center'>
+                      <Input
+                        placeholder='0'
+                        {...field}
+                        inputMode='decimal'
+                        className={clsx(
+                          'border-none focus:border-none focus-visible:ring-0',
+                          'text-5xl px-2 text-right h-auto',
+                        )}
+                        style={{
+                          width: `${Math.max(1, form.watch('amount').toString().length) + 0.75}ch`,
+                          maxWidth: '8.5ch',
+                        }}
+                      />
+                    </div>
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -133,10 +161,10 @@ const TransactionForm = () => {
               name='currency'
               render={({ field }) => {
                 return (
-                  <FormItem className='w-3/12'>
+                  <FormItem className='w-16' aria-label='Moneda'>
                     <Select onValueChange={field.onChange} defaultValue={field.value} {...field}>
-                      <FormControl className='py-1 px-2'>
-                        <SelectTrigger>
+                      <FormControl className='p-1 text-lg'>
+                        <SelectTrigger className='border-none focus:border-none focus:ring-0 focus-visible:ring-0'>
                           <SelectValue placeholder='Moneda' />
                         </SelectTrigger>
                       </FormControl>
@@ -150,12 +178,18 @@ const TransactionForm = () => {
                         })}
                       </SelectContent>
                     </Select>
-                    <FormMessage />
                   </FormItem>
                 );
               }}
             />
           </div>
+          {errors.amount && (
+            <p className={cn('text-xs font-medium text-destructive')}>{errors.amount.message}</p>
+          )}
+          {errors.type && <p className={cn('text-xs font-medium text-destructive')}>{errors.type.message}</p>}
+          {errors.currency && (
+            <p className={cn('text-xs font-medium text-destructive')}>{errors.currency.message}</p>
+          )}
         </div>
         <FormField
           control={form.control}
@@ -163,7 +197,7 @@ const TransactionForm = () => {
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel>Categoría</FormLabel>
+                <Label>Categoría</Label>
                 <Select onValueChange={field.onChange} defaultValue={field.value} {...field}>
                   <FormControl>
                     <SelectTrigger>
@@ -190,7 +224,7 @@ const TransactionForm = () => {
           name='description'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Descripción</FormLabel>
+              <Label>Descripción</Label>
               <FormControl>
                 <Textarea placeholder='Escribe una breve descripción' className='resize-none' {...field} />
               </FormControl>
