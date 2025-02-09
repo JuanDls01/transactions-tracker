@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Geist, Geist_Mono, Inter } from 'next/font/google';
 import './globals.css';
-import clsx from 'clsx';
 import { Toaster } from '@/ui/elements/toaster';
+import { cn } from '@/lib/utils';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -12,6 +12,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
+});
+
+const inter = Inter({
+  subsets: ['latin'], // Subconjunto para mejorar el rendimiento
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'], // Pesos disponibles
+  variable: '--font-inter', // Definir una variable CSS opcional
 });
 
 export const metadata: Metadata = {
@@ -36,13 +42,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`dark ${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div
-          className={clsx(
-            'border-grid flex flex-1 flex-col items-center min-h-screen',
-            'font-[family-name:var(--font-geist-sans)]',
-          )}
-        >
+      <body className={`dark ${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}>
+        <div className={cn('border-grid flex flex-1 flex-col items-center min-h-screen', 'font-inter')}>
           {children}
         </div>
         <Toaster />
