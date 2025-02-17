@@ -27,13 +27,6 @@ export const onSubmitAction = async (
       };
     }
 
-    if (parsed.data.category === TransactionCategory.Car) {
-      return {
-        success: false,
-        message: 'Category cannot be CAR for now',
-      };
-    }
-
     const { amount, category, description, currency, type } = parsed.data;
 
     const userId = session.user.id;
