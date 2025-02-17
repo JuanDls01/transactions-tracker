@@ -1,6 +1,5 @@
 'use server';
 import { schema } from './schemas';
-import { TransactionCategory } from '@/types/transactions';
 import { ActionResponse } from '@/types/actions';
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/app/auth';
