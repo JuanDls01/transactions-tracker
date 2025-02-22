@@ -1,7 +1,6 @@
 # 🐷 TuChanchito PWA
 
-Welcome to TuChanchito! This is a expense tracker 💰 progressive web application (PWA). I started this project to give me and my girlfriend a tool
-to manage our personal expenses.
+Welcome to TuChanchito! This is a progressive web application (PWA) designed to track personal expenses 💰. I started this project to help my girlfriend and me manage our finances more effectively.
 
 🚀 [Live Demo](https://tuchanchito.juanidls.dev)
 
