@@ -15,6 +15,7 @@ import { Transaction } from '@prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
 import { Ellipsis, MinusCircle, PlusCircleIcon } from 'lucide-react';
 import DeleteTransactionBttn from './components/delete-transaction-bttn';
+import Link from 'next/link';
 
 const categoryLabels = {
   FOOD: 'Comida',
@@ -89,7 +90,14 @@ export const transactionColumns: ColumnDef<Omit<Transaction, 'amount'> & { amoun
           <DropdownMenuContent align='end'>
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Editar</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link
+                href={`/transactions/${row.original.id}`}
+                className='p-0 w-full text-start flex justify-start h-auto'
+              >
+                Editar
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem>
               <DeleteTransactionBttn transactionId={row.original.id} />
             </DropdownMenuItem>
