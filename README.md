@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🐷 TuChanchito PWA
 
-## Getting Started
+Welcome to TuChanchito! This is a expense tracker 💰 progressive web application (PWA). I started this project to give me and my girlfriend a tool
+to manage our personal expenses.
 
-First, run the development server:
+🚀 [Live Demo](https://tuchanchito.juanidls.dev)
+
+## 📌 Features
+
+- Log transactions,
+- Categorize transactions,
+- Visualize real-time statistics.
+
+## 🛠 Installation & Usage
+
+Clone the repository:
+
+```bash
+git clone https://github.com/JuanDls01/transactions-tracker.git
+```
+
+Install dependencies:
+
+```bash
+cd transactions-tracker
+npm install
+```
+
+Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open in your browser: [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🤝 Contributing
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+If you have ideas or suggestions to improve TuChanchito, feel free to reach out! Let's collaborate and build something great together 🚀.
 
-## Learn More
+### 📬 Contact
 
-To learn more about Next.js, take a look at the following resources:
+If you have any idea or suggestion about the pwa pls reach me out and let's start working together:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- 💼 [LinkedIn](https://www.linkedin.com/in/juandelossantosdeveloper/)
+- 🐦 [Twitter](https://x.com/JuanDls01)
+- 🌐 [Portfolio](https://juanidls.dev)
