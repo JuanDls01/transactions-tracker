@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { schema } from './schemas';
 import { z } from 'zod';
 import { FormEvent, startTransition, useActionState, useEffect, useRef } from 'react';
-import { onSubmitAction } from './actions';
+import { onSubmitTransaction } from './actions';
 import { ActionResponse } from '@/types/actions';
 import { Currency, TransactionType } from '@prisma/client';
 import { CheckCircle2, Loader2 } from 'lucide-react';
@@ -15,7 +15,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/ui/elemen
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/ui/elements/select';
 import { Input } from '@/ui/elements/input';
 import { Alert, AlertDescription } from '@/ui/elements/alert';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { ToggleGroup, ToggleGroupItem } from '@/ui/elements/toggle-group';
 import { cn } from '@/lib/utils';
 import clsx from 'clsx';
 import { Label } from '@/ui/elements/label';
@@ -35,17 +35,22 @@ const defaultFormValues = {
   amount: '',
 };
 
-const TransactionForm = () => {
+type TransactionFormPropsType = {
+  transaction?: TransactionFormSchema;
+};
+
+const TransactionForm = ({ transaction }: TransactionFormPropsType) => {
   // Use Action State to handle server action and server validations
   // state: server action response
   // formAction: dispatch server action
   // isPedning: boolean to know if is loading
-  const [state, formAction, isPending] = useActionState(onSubmitAction, initialState);
+  const [state, formAction, isPending] = useActionState(onSubmitTransaction, initialState);
+  const isEditing = !!transaction;
 
   // Use RHF to handle client side validations
   const form = useForm<TransactionFormSchema>({
     resolver: zodResolver(schema),
-    defaultValues: {
+    defaultValues: transaction || {
       ...defaultFormValues,
       ...(state?.inputs ?? {}),
     },
@@ -53,24 +58,25 @@ const TransactionForm = () => {
   });
 
   const { errors } = form.formState;
+  console.log(transaction);
 
   const formRef = useRef<HTMLFormElement>(null);
 
   const onSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    form.handleSubmit(async () => {
-      try {
-        const formData = new FormData(formRef.current!);
+    form.handleSubmit(() => {
+      // const formData = new FormData(formRef.current!);
 
-        // We cannot dispatch an async fc of useActionState (onSubmitAction)
-        // outside of an action context, so we use startTransition
-        // reference: https://react.dev/reference/rsc/use-server#calling-a-server-function-outside-of-form
-        startTransition(() => {
-          formAction(formData);
-        });
-      } catch (err) {
-        console.error(err);
-      }
+      // We cannot dispatch an async fc of useActionState (onSubmitAction)
+      // outside of an action context, so we use startTransition
+      // reference: https://react.dev/reference/rsc/use-server#calling-a-server-function-outside-of-form
+      startTransition(() => {
+        const formData = new FormData(formRef.current!);
+        if (isEditing && transaction?.id !== undefined) {
+          formData.append('id', String(transaction?.id));
+        }
+        formAction(formData);
+      });
     })(evt);
   };
 
@@ -106,7 +112,7 @@ const TransactionForm = () => {
                     className={cn(
                       'w-24 p-1 rounded-full transition-all text-sm',
                       field.value === TransactionType.INCOME
-                        ? 'bg-[#2FF76D] text-white font-bold'
+                        ? 'bg-[#2FF76D] text-white font-bold data-[state=on]:bg-[#2FF76D] data-[state=on]:text-white'
                         : 'bg-[#3DDC84]/20 text-[#3DDC84]',
                     )}
                   >
@@ -117,7 +123,7 @@ const TransactionForm = () => {
                     className={cn(
                       'w-24 p-1 rounded-full transition-all text-sm',
                       field.value === TransactionType.EXPENSE
-                        ? 'bg-[#B30C36] text-white font-bold hover:bg-[#B30C36]'
+                        ? 'bg-[#B30C36] text-white font-bold hover:bg-[#B30C36] data-[state=on]:bg-[#B30C36] data-[state=on]:text-white'
                         : 'bg-[#B30C36]/20 hover:bg-[#B30C36]/20 hover:text-[#B30C36] text-[#B30C36]',
                     )}
                   >
