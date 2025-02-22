@@ -2,6 +2,7 @@ import { Currency, TransactionCategory, TransactionType } from '@prisma/client';
 import { z } from 'zod';
 
 export const schema = z.object({
+  id: z.number().optional(),
   amount: z.preprocess(
     (value) => (typeof value === 'string' ? parseFloat(value) : value),
     z
