@@ -19,6 +19,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/ui/elements/toggle-group';
 import { cn } from '@/lib/utils';
 import clsx from 'clsx';
 import { Label } from '@/ui/elements/label';
+import { useRouter } from 'next/navigation';
 
 type TransactionFormSchema = Omit<z.output<typeof schema>, 'amount'> & {
   amount: string | number;
@@ -45,6 +46,8 @@ const TransactionForm = ({ transaction }: TransactionFormPropsType) => {
   // formAction: dispatch server action
   // isPedning: boolean to know if is loading
   const [state, formAction, isPending] = useActionState(onSubmitTransaction, initialState);
+  const router = useRouter();
+
   const isEditing = !!transaction;
 
   // Use RHF to handle client side validations
@@ -82,6 +85,7 @@ const TransactionForm = ({ transaction }: TransactionFormPropsType) => {
 
   useEffect(() => {
     if (!isPending && state.success) {
+      if (isEditing) router.replace('/transactions');
       form.reset({
         ...defaultFormValues,
         category: form.getValues('category'),
