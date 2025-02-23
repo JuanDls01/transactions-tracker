@@ -4,6 +4,7 @@ import { ActionResponse } from '@/types/actions';
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/app/auth';
 import { revalidatePath } from 'next/cache';
+import { getIfUserIsAuthenticated } from '@/utils/auth';
 
 export async function onSubmitTransaction(_: ActionResponse<typeof schema> | null, formData: FormData) {
   const id = formData.get('id');
@@ -18,7 +19,8 @@ export async function onSubmitTransaction(_: ActionResponse<typeof schema> | nul
 export const createTransaction = async (data: FormData): Promise<ActionResponse<typeof schema>> => {
   try {
     const session = await auth();
-    if (!session || !session.user) {
+    const isAuthenticated = getIfUserIsAuthenticated(session);
+    if (!isAuthenticated) {
       return { success: false, message: 'Usuario no autenticado' };
     }
     const formData = Object.fromEntries(data);
@@ -35,7 +37,7 @@ export const createTransaction = async (data: FormData): Promise<ActionResponse<
 
     const { amount, category, description, currency, type } = parsed.data;
 
-    const userId = session.user.id;
+    const userId = session?.user?.id;
 
     await prisma.transaction.create({
       data: {
@@ -64,7 +66,8 @@ export const createTransaction = async (data: FormData): Promise<ActionResponse<
 const updateTransaction = async (data: FormData): Promise<ActionResponse<typeof schema>> => {
   try {
     const session = await auth();
-    if (!session || !session.user?.id) {
+    const isAuthenticated = getIfUserIsAuthenticated(session);
+    if (!isAuthenticated) {
       return { success: false, message: 'Usuario no autenticado' };
     }
     const formData = Object.fromEntries(data);
@@ -72,7 +75,6 @@ const updateTransaction = async (data: FormData): Promise<ActionResponse<typeof 
     const parsed = schema.safeParse({ ...formData, id: transactionId });
 
     if (!parsed.success) {
-      console.log({ errors: parsed.error.flatten().fieldErrors, err: parsed.error });
       return {
         success: false,
         message: 'Por favor corrija los errores del formulario',
@@ -86,6 +88,7 @@ const updateTransaction = async (data: FormData): Promise<ActionResponse<typeof 
     await prisma.transaction.update({
       where: {
         id: id,
+        authorId: session?.user?.id,
       },
       data: transactionData,
     });
