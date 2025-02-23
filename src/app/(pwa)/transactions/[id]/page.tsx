@@ -18,9 +18,7 @@ const EditTransactionPage = async ({ params }: { params: Promise<{ id: string }>
   );
 };
 
-export default EditTransactionPage;
-
-export const getTransaction = async (id: string | number) => {
+const getTransaction = async (id: string | number) => {
   try {
     const session = await auth();
     const userId = session?.user?.id;
@@ -35,3 +33,5 @@ export const getTransaction = async (id: string | number) => {
     throw err;
   }
 };
+
+export default EditTransactionPage;
