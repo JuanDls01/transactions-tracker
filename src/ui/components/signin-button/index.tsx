@@ -4,9 +4,7 @@ import { signInAction } from './actions';
 const SignInButton = () => {
   return (
     <form action={signInAction}>
-      <Button type='submit' variant='outline'>
-        Iniciar Sesión
-      </Button>
+      <Button type='submit'>Iniciar Sesión</Button>
     </form>
   );
 };
