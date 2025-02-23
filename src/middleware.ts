@@ -1,6 +1,7 @@
 // This is an optional middleware to keep session alive, this will update the session expiry every time its called
 import { auth } from '@/app/auth';
 import { NextRequest, NextResponse } from 'next/server';
+import { getIfUserIsAuthenticated } from './utils/auth';
 
 const authRoutes = ['/auth/login', '/auth/signup'];
 const protectedRotues = ['/users', '/dashboard', '/transactions', '/transactions/new'];
@@ -12,7 +13,7 @@ export async function middleware(req: NextRequest) {
 
   // Authentication block
   const session = await auth();
-  const isAuthenticated = !!session && !!session.user;
+  const isAuthenticated = getIfUserIsAuthenticated(session);
 
   // If user is already authenticated, redirect to the dashboard.
   if (isAuthenticationRoute) {
