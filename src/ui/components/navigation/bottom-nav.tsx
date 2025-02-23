@@ -10,9 +10,9 @@ import {
   DialogTrigger,
 } from '@/ui/elements/dialog';
 import { ArrowRightLeft, Landmark, List } from 'lucide-react';
-import TransactionForm from '../../transaction-form';
-import { getPathActiveClass } from '../utils';
 import { cn } from '@/lib/utils';
+import { getPathActiveClass } from './utils';
+import TransactionForm from '../transaction-form';
 
 const BottomNav = () => {
   const pathname = usePathname();

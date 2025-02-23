@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/react';
 import './globals.css';
 import { Toaster } from '@/ui/elements/toaster';
 import { cn } from '@/lib/utils';
+import Header from '@/ui/components/navigation/header';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -43,10 +44,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`dark ${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}>
-        <div className={cn('border-grid flex flex-1 flex-col items-center min-h-screen', 'font-inter')}>
-          {children}
-        </div>
+      <body
+        className={`dark ${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased min-h-screen`}
+      >
+        <div className='absolute top-0 left-0 -z-10 w-full h-14 bg-[#156359] opacity-40 blur-3xl -translate-y-1/2 sm:-translate-y-0'></div>
+        <Header />
+        <div className={cn('border-grid flex flex-1 flex-col items-center', 'font-inter')}>{children}</div>
         <Toaster />
         <Analytics />
       </body>
