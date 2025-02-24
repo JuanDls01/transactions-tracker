@@ -11,11 +11,11 @@ export default {
     container: {
       padding: {
         DEFAULT: '1rem',
-        sm: '8rem',
-        md: '12rem',
-        lg: '16rem',
-        xl: '28rem',
-        '2xl': '32rem',
+        sm: '4rem',
+        md: '8rem',
+        lg: '12rem',
+        xl: '20rem',
+        '2xl': '24rem',
       },
     },
     extend: {
