@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  test:
+  Unit-Tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -19,7 +19,7 @@ jobs:
   Deploy-Preview:
     needs: test
     runs-on: ubuntu-latest
-    environment: Preview # 👈 Usa el entorno Preview de GitHub
+    environment: Preview
     env:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
@@ -39,4 +39,8 @@ jobs:
         run: vercel build --token=$VERCEL_TOKEN
 
       - name: Deploy Project Artifacts to Vercel
-        run: vercel deploy --prebuilt --token=$VERCEL_TOKEN
+        id: deploy
+        run: echo "DEPLOY_URL=$(vercel deploy --prebuilt --token=$VERCEL_TOKEN)" >> $GITHUB_ENV
+      
+      - name: Show Deploy URL
+        run: echo "🔗 Preview Deployment URL: $DEPLOY_URL"
