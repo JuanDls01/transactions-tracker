@@ -16,7 +16,10 @@
     "prisma:seed": "npx prisma db seed",
     "postinstall": "prisma generate",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "vercel": "vercel",
+    "vercel:deploy": "vercel --token $VERCEL_TOKEN",
+    "vercel:pull": "vercel pull --token $VERCEL_TOKEN"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
@@ -81,7 +84,8 @@
     "prisma": "^6.2.1",
     "tailwindcss": "^3.4.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vercel": "^41.2.1"
   },
   "overrides": {
     "react-is": "^19.0.0-rc-69d4b800-20241021"
