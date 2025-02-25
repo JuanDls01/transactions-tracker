@@ -17,7 +17,7 @@ jobs:
         run: npm run test
 
   Deploy-Preview:
-    needs: test
+    needs: Unit-Tests
     runs-on: ubuntu-latest
     environment: Preview
     env:
