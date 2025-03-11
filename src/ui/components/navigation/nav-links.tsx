@@ -1,5 +1,5 @@
 'use client';
-import { Home, Plus, Sheet } from 'lucide-react';
+import { ArrowRightLeft, ChartNoAxesCombined, Home, Sheet } from 'lucide-react';
 import Link from 'next/link';
 import { JSX } from 'react';
 import { getPathActiveClass } from './utils';
@@ -12,8 +12,13 @@ export type NavLinkType = {
 };
 
 export const links = [
-  { href: '/dashboard', label: 'Inicio', icon: <Home /> },
-  { href: '/transactions/new', label: 'Cargar', icon: <Plus /> },
+  { href: '/home', label: 'Inicio', icon: <Home /> },
+  {
+    href: '/transactions/new',
+    label: 'Cargar',
+    icon: <ArrowRightLeft className='font-bold' />,
+  },
+  { href: '/dashboard', label: 'Dashboard', icon: <ChartNoAxesCombined /> },
   { href: '/transactions', label: 'Movimientos', icon: <Sheet /> },
 ];
 
