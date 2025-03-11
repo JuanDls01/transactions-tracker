@@ -1,3 +1,6 @@
-export const firstDateOfMonth = (date = new Date()) => new Date(date.getFullYear(), date.getMonth(), 1);
+export const firstDayOfMonth = (date = new Date()) => new Date(date.getFullYear(), date.getMonth(), 1);
 
-export const lastDateOfMonth = (date = new Date()) => new Date(date.getFullYear(), date.getMonth() + 1, 0);
+export const lastDayOfMonth = (date = new Date()) => new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+export const firstDay6MonthEarlier = (date = new Date()) =>
+  new Date(date.getFullYear(), date.getMonth() - 6, 1);
