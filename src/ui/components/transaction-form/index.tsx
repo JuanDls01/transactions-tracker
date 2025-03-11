@@ -44,7 +44,7 @@ const TransactionForm = ({ transaction }: TransactionFormPropsType) => {
   // Use Action State to handle server action and server validations
   // state: server action response
   // formAction: dispatch server action
-  // isPedning: boolean to know if is loading
+  // isPending: boolean to know if is loading
   const [state, formAction, isPending] = useActionState(onSubmitTransaction, initialState);
   const router = useRouter();
 
@@ -85,7 +85,7 @@ const TransactionForm = ({ transaction }: TransactionFormPropsType) => {
 
   useEffect(() => {
     if (!isPending && state.success) {
-      if (isEditing) router.replace('/transactions');
+      router.replace('/transactions');
       form.reset({
         ...defaultFormValues,
         category: form.getValues('category'),
