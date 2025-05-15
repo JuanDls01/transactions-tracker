@@ -1,7 +1,7 @@
 'use server';
 import { schema } from './schemas';
 import { ActionResponse } from '@/types/actions';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@repo/db';
 import { auth } from '@/app/auth';
 import { revalidatePath } from 'next/cache';
 import { getIfUserIsAuthenticated } from '@/utils/auth';

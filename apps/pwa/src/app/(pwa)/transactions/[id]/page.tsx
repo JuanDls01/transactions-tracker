@@ -1,5 +1,5 @@
 import { auth } from '@/app/auth';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@repo/db';
 import TransactionForm from '@/ui/components/transaction-form';
 import { notFound } from 'next/navigation';
 

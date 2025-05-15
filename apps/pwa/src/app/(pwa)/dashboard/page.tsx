@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@repo/db';
 import { Currency, TransactionType } from '@prisma/client';
 import { firstDayOfMonth, lastDayOfMonth } from '@/utils/dates';
 import { Separator } from '@/ui/elements/separator';
