@@ -15,7 +15,8 @@
     "format": "prettier --write .",
     "commitlint": "commitlint --edit",
     "prepare": "husky install",
-    "start:dev": "turbo start:dev"
+    "start:dev": "turbo start:dev",
+    "db:migrate:dev": "turbo db:migrate:dev"
   },
   "husky": {
     "hooks": {

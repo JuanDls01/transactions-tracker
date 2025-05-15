@@ -12,6 +12,6 @@
     "db:migrate:dev": "prisma migrate dev",
     "db:push": "prisma db push",
     "db:seed": "tsx src/seed.ts",
-    "start": "docker-compose up"
+    "start:dev": "docker-compose up"
   }
 }

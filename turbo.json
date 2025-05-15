@@ -1,11 +1,15 @@
 {
-    "$schema": "https://turbo.build/schema.json",
-    "tasks": {
-      "start:dev": {
-        "cache": false
-      },
-      "check-types": {
-        "dependsOn": ["^check-types"]
-      }
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "start:dev": {
+      "cache": false
+    },
+    "check-types": {
+      "dependsOn": ["^check-types"]
+    },
+    "db:migrate:dev": {
+      "cache": false,
+      "persistent": true
     }
   }
+}
