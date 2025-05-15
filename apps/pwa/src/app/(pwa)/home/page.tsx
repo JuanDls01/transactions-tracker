@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/ui/elements/card';
-import { prisma } from '@/lib/prisma';
 import { DataTable } from '@/ui/components/data-table';
+import { prisma } from '@repo/db';
 import Link from 'next/link';
 import { parseDecimalToString } from '@/utils/numbers';
 import { transactionColumns } from '../transactions/transaction-columns';

@@ -13,5 +13,13 @@
     "db:push": "prisma db push",
     "db:seed": "tsx src/seed.ts",
     "start:dev": "docker-compose up"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.15",
+    "prisma": "^6.7.0",
+    "typescript": "^5.8.3"
   }
 }
