@@ -17,7 +17,7 @@ const DashboardPage = async () => {
   return (
     <>
       <div className='py-6'>
-        <h1 className='text-3xl sm:text-4xl font-bold pt-4 sm:pt-6'>Resumen Financiero</h1>
+        <h1 className='text-3xl mb-2 sm:text-4xl font-bold pt-4 sm:pt-6'>Resumen Financiero</h1>
         <p className='text-base sm:text-lg text-muted-foreground'>
           Visualiza tus ingresos, gastos y métricas clave en un solo lugar.
         </p>

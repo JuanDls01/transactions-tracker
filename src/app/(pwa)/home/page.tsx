@@ -16,7 +16,7 @@ const HomePage = async () => {
   return (
     <>
       <div className='py-6'>
-        <h1 className='text-3xl sm:text-4xl font-bold pt-4 sm:pt-6'>Resumen de cuenta</h1>
+        <h1 className='text-3xl mb-2 sm:text-4xl font-bold pt-4 sm:pt-6'>Resumen de cuenta</h1>
         <p className='text-base sm:text-lg text-muted-foreground'>
           Aquí encontraras un resumen de tus gastos
         </p>
