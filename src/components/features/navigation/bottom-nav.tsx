@@ -28,9 +28,9 @@ const BottomNav = () => {
   return (
     <nav
       className={cn(
-        'h-20 w-full sm:hidden container pt-2',
+        'h-20 w-full sm:hidden container pt-2 mt-3',
         'fixed bottom-0 z-10',
-        'bg-[#1A202C]',
+        'bg-card border-t border-border',
         'flex flex-row items-start justify-around',
       )}
     >

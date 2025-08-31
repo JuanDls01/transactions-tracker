@@ -69,8 +69,14 @@ export default {
           '10': 'hsl(var(--chart-10))',
           '11': 'hsl(var(--chart-11))',
         },
-        income: 'hsl(var(--income))',
-        outcome: 'hsl(var(--outcome))',
+        income: {
+          DEFAULT: 'hsl(var(--income))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
+        outcome: {
+          DEFAULT: 'hsl(var(--outcome))', 
+          foreground: 'hsl(var(--primary-foreground))',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',

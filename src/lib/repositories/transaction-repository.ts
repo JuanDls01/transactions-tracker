@@ -1,5 +1,5 @@
 import { prisma, TransactionType, Currency, TransactionCategory } from '@repo/db';
-import { DatabaseError, NotFoundError } from '@/lib/errors';
+import { DatabaseError, NotFoundError, ConnectionError, isConnectionError } from '@/lib/errors';
 import { logger } from '@/lib/logger';
 import { parseDecimalToString } from '@/utils/numbers';
 import { DEFAULT_PAGE_SIZE } from '@/lib/constants';
@@ -32,10 +32,18 @@ export interface TransactionUpdateData extends Partial<TransactionData> {
 }
 
 export class TransactionRepository {
-  async findMany(
-    filters: TransactionFilters,
-    pagination: PaginationOptions
-  ) {
+  private handleDatabaseError(error: unknown, operation: string, context?: any): never {
+    const err = error as Error;
+    
+    if (isConnectionError(error)) {
+      logger.error(`Database connection failed during ${operation}`, err, `TransactionRepository.${operation}`, context);
+      throw new ConnectionError('Database is temporarily unavailable. Please try again later.', err);
+    }
+    
+    logger.error(`Database operation failed: ${operation}`, err, `TransactionRepository.${operation}`, context);
+    throw new DatabaseError(`Failed to ${operation}`, err);
+  }
+  async findMany(filters: TransactionFilters, pagination: PaginationOptions) {
     try {
       const { userId, type, currency, category, startDate, endDate } = filters;
       const { page, pageSize = DEFAULT_PAGE_SIZE } = pagination;
@@ -45,12 +53,14 @@ export class TransactionRepository {
         ...(type && { type }),
         ...(currency && { currency }),
         ...(category && { category }),
-        ...(startDate || endDate ? {
-          createdAt: {
-            ...(startDate && { gte: startDate }),
-            ...(endDate && { lte: endDate }),
-          }
-        } : {}),
+        ...(startDate || endDate
+          ? {
+              createdAt: {
+                ...(startDate && { gte: startDate }),
+                ...(endDate && { lte: endDate }),
+              },
+            }
+          : {}),
       };
 
       const [transactions, totalRecords] = await Promise.all([
@@ -74,11 +84,7 @@ export class TransactionRepository {
         totalRecords,
       };
     } catch (error) {
-      logger.error('Failed to fetch transactions', error as Error, 'TransactionRepository.findMany', {
-        filters,
-        pagination,
-      });
-      throw new DatabaseError('Failed to fetch transactions', error as Error);
+      this.handleDatabaseError(error, 'fetch transactions', { filters, pagination });
     }
   }
 
@@ -100,12 +106,8 @@ export class TransactionRepository {
       if (error instanceof NotFoundError) {
         throw error;
       }
-      
-      logger.error('Failed to fetch transaction by ID', error as Error, 'TransactionRepository.findById', {
-        id,
-        userId,
-      });
-      throw new DatabaseError('Failed to fetch transaction', error as Error);
+
+      this.handleDatabaseError(error, 'fetch transaction by ID', { id, userId });
     }
   }
 
@@ -123,15 +125,14 @@ export class TransactionRepository {
         amount: parseDecimalToString(transaction.amount),
       };
     } catch (error) {
-      logger.error('Failed to create transaction', error as Error, 'TransactionRepository.create', { data });
-      throw new DatabaseError('Failed to create transaction', error as Error);
+      this.handleDatabaseError(error, 'create transaction', { data });
     }
   }
 
   async update(data: TransactionUpdateData) {
     try {
       const { id, ...updateData } = data;
-      
+
       const transaction = await prisma.transaction.update({
         where: { id },
         data: {
@@ -145,8 +146,7 @@ export class TransactionRepository {
         amount: parseDecimalToString(transaction.amount),
       };
     } catch (error) {
-      logger.error('Failed to update transaction', error as Error, 'TransactionRepository.update', { data });
-      throw new DatabaseError('Failed to update transaction', error as Error);
+      this.handleDatabaseError(error, 'update transaction', { data });
     }
   }
 
@@ -154,7 +154,7 @@ export class TransactionRepository {
     try {
       // Verify the transaction belongs to the user before deleting
       const transaction = await this.findById(id, userId);
-      
+
       await prisma.transaction.delete({
         where: { id },
       });
@@ -164,12 +164,8 @@ export class TransactionRepository {
       if (error instanceof NotFoundError) {
         throw error;
       }
-      
-      logger.error('Failed to delete transaction', error as Error, 'TransactionRepository.delete', {
-        id,
-        userId,
-      });
-      throw new DatabaseError('Failed to delete transaction', error as Error);
+
+      this.handleDatabaseError(error, 'delete transaction', { id, userId });
     }
   }
 
@@ -197,12 +193,7 @@ export class TransactionRepository {
         amount: Number(exp._sum.amount ?? 0),
       }));
     } catch (error) {
-      logger.error('Failed to fetch monthly expenses by category', error as Error, 'TransactionRepository.getMonthlyExpensesByCategory', {
-        userId,
-        year,
-        month,
-      });
-      throw new DatabaseError('Failed to fetch monthly expenses by category', error as Error);
+      this.handleDatabaseError(error, 'fetch monthly expenses by category', { userId, year, month });
     }
   }
 
@@ -222,18 +213,15 @@ export class TransactionRepository {
       `;
 
       return data.map((item) => ({
-        month: new Date(item.month).toLocaleString('es-ES', { 
-          month: 'long', 
-          year: 'numeric' 
+        month: new Date(item.month).toLocaleString('es-ES', {
+          month: 'long',
+          year: 'numeric',
         }),
         income: Number(item.income),
         expense: Number(item.expense),
       }));
     } catch (error) {
-      logger.error('Failed to fetch income vs expenses per month', error as Error, 'TransactionRepository.getIncomeVsExpensesPerMonth', {
-        userId,
-      });
-      throw new DatabaseError('Failed to fetch income vs expenses data', error as Error);
+      this.handleDatabaseError(error, 'fetch income vs expenses per month', { userId });
     }
   }
 }

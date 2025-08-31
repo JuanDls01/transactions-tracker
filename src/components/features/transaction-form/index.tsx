@@ -30,7 +30,6 @@ const initialState: ActionResponse<TransactionFormSchema> = {
   message: '',
 };
 
-
 type TransactionFormPropsType = {
   transaction?: TransactionFormSchema;
 };
@@ -110,8 +109,8 @@ const TransactionForm = ({ transaction }: TransactionFormPropsType) => {
                     className={cn(
                       'w-24 p-1 rounded-full transition-all text-sm',
                       field.value === TransactionType.INCOME
-                        ? 'bg-[#2FF76D] text-white font-bold data-[state=on]:bg-[#2FF76D] data-[state=on]:text-white'
-                        : 'bg-[#3DDC84]/20 text-[#3DDC84]',
+                        ? 'bg-income text-primary-foreground font-bold data-[state=on]:bg-income data-[state=on]:text-primary-foreground'
+                        : 'bg-income/20 text-income',
                     )}
                   >
                     INGRESO
@@ -121,8 +120,8 @@ const TransactionForm = ({ transaction }: TransactionFormPropsType) => {
                     className={cn(
                       'w-24 p-1 rounded-full transition-all text-sm',
                       field.value === TransactionType.EXPENSE
-                        ? 'bg-[#B30C36] text-white font-bold hover:bg-[#B30C36] data-[state=on]:bg-[#B30C36] data-[state=on]:text-white'
-                        : 'bg-[#B30C36]/20 hover:bg-[#B30C36]/20 hover:text-[#B30C36] text-[#B30C36]',
+                        ? 'bg-outcome text-primary-foreground font-bold hover:bg-outcome data-[state=on]:bg-outcome data-[state=on]:text-primary-foreground'
+                        : 'bg-outcome/20 hover:bg-outcome/20 hover:text-outcome text-outcome',
                     )}
                   >
                     EGRESO

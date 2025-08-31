@@ -13,7 +13,17 @@
     "db:migrate:dev": "prisma migrate dev",
     "db:push": "prisma db push",
     "db:seed": "tsx src/seed.ts",
-    "start:dev": "docker-compose up"
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f postgres",
+    "docker:restart": "docker-compose restart postgres",
+    "docker:clean": "docker-compose down -v --remove-orphans",
+    "docker:test": "docker-compose --profile test up -d postgres_test",
+    "docker:test:down": "docker-compose --profile test down postgres_test",
+    "dev:setup": "npm run docker:up && sleep 5 && npm run db:migrate:dev && npm run db:seed",
+    "dev:reset": "npm run docker:clean && npm run dev:setup",
+    "start:dev": "docker-compose up",
+    "health": "docker ps --filter name=transactions-tracker-postgres-dev --format 'table {{.Names}}\\t{{.Status}}\\t{{.Ports}}'"
   },
   "dependencies": {
     "@prisma/client": "^6.2.1"

@@ -15,25 +15,31 @@ class Logger {
   private formatLogEntry(entry: LogEntry): string {
     const { level, message, timestamp, context, error, metadata } = entry;
     let logString = `[${timestamp}] ${level.toUpperCase()}`;
-    
+
     if (context) {
       logString += ` [${context}]`;
     }
-    
+
     logString += `: ${message}`;
-    
+
     if (error) {
       logString += `\nError: ${error.message}\nStack: ${error.stack}`;
     }
-    
+
     if (metadata && Object.keys(metadata).length > 0) {
       logString += `\nMetadata: ${JSON.stringify(metadata, null, 2)}`;
     }
-    
+
     return logString;
   }
 
-  private log(level: LogLevel, message: string, context?: string, error?: Error, metadata?: Record<string, unknown>) {
+  private log(
+    level: LogLevel,
+    message: string,
+    context?: string,
+    error?: Error,
+    metadata?: Record<string, unknown>,
+  ) {
     const entry: LogEntry = {
       level,
       message,

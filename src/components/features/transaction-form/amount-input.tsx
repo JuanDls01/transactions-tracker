@@ -27,11 +27,11 @@ interface AmountInputProps<T extends FieldValues> {
   };
 }
 
-export function AmountInput<T extends FieldValues>({ 
-  amountField, 
-  currencyField, 
+export function AmountInput<T extends FieldValues>({
+  amountField,
+  currencyField,
   watch,
-  errors 
+  errors,
 }: AmountInputProps<T>) {
   const amountValue = watch(amountField.name as FieldPath<T>);
 
@@ -61,9 +61,9 @@ export function AmountInput<T extends FieldValues>({
           </FormControl>
         </FormItem>
         <FormItem className='w-16' aria-label='Moneda'>
-          <Select 
-            onValueChange={currencyField.onChange} 
-            defaultValue={currencyField.value} 
+          <Select
+            onValueChange={currencyField.onChange}
+            defaultValue={currencyField.value}
             value={currencyField.value}
           >
             <FormControl className='p-1 text-lg'>
@@ -81,7 +81,7 @@ export function AmountInput<T extends FieldValues>({
           </Select>
         </FormItem>
       </div>
-      
+
       {errors?.amount && (
         <p className={cn('text-xs font-medium text-destructive')}>{errors.amount.message}</p>
       )}

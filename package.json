@@ -2,7 +2,9 @@
   "name": "transactions-tracker",
   "version": "0.1.0",
   "private": true,
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "npm run db:generate && next build",
@@ -16,6 +18,13 @@
     "db:migrate": "npm run db:migrate:dev --workspace=@repo/db",
     "db:push": "npm run db:push --workspace=@repo/db",
     "db:seed": "npm run db:seed --workspace=@repo/db",
+    "docker:up": "npm run docker:up --workspace=@repo/db",
+    "docker:down": "npm run docker:down --workspace=@repo/db",
+    "docker:logs": "npm run docker:logs --workspace=@repo/db",
+    "docker:clean": "npm run docker:clean --workspace=@repo/db",
+    "dev:setup": "npm run dev:setup --workspace=@repo/db",
+    "dev:reset": "npm run dev:reset --workspace=@repo/db",
+    "dev:full": "npm run dev:setup && npm run dev",
     "postinstall": "npm run db:generate"
   },
   "husky": {

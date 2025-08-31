@@ -5,6 +5,7 @@ import './globals.css';
 import { Toaster } from '@/ui/toaster';
 import { cn } from '@/lib/utils';
 import Header from '@/features/navigation/header';
+import { ThemeProvider } from '@/providers/theme-provider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -45,13 +46,14 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body
-        className={`dark ${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased min-h-screen bg-background`}
       >
-        <div className='absolute top-0 left-0 -z-10 w-full h-14 bg-[#156359] opacity-40 blur-3xl -translate-y-1/2 sm:-translate-y-0'></div>
-        <Header />
-        <div className={cn('border-grid flex flex-1 flex-col items-center', 'font-inter')}>{children}</div>
-        <Toaster />
-        <Analytics />
+        <ThemeProvider defaultTheme='system'>
+          <Header />
+          <div className={cn('border-grid flex flex-1 flex-col', 'font-inter')}>{children}</div>
+          <Toaster />
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   );

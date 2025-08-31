@@ -18,9 +18,9 @@ export function DescriptionField<T extends FieldValues>({ field }: DescriptionFi
     <FormItem>
       <Label>Descripción</Label>
       <FormControl>
-        <Textarea 
-          placeholder='Escribe una breve descripción' 
-          className='resize-none' 
+        <Textarea
+          placeholder='Escribe una breve descripción'
+          className='resize-none'
           name={field.name}
           value={field.value || ''}
           onChange={(e) => field.onChange(e.target.value)}

@@ -1,22 +1,59 @@
-version: '3.9'
+version: '3.8'
 
 services:
-  db:
-    image: postgres:15
-    container_name: postgres-db
-    ports:
-      - '5432:5432'
+  postgres:
+    image: postgres:16-alpine
+    container_name: transactions-tracker-postgres-dev
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: prisma
-      POSTGRES_DB: postgres
+      POSTGRES_DB: ${POSTGRES_DB:-transactions_tracker_dev}
+      POSTGRES_USER: ${POSTGRES_USER:-dev_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dev_password}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - postgres_dev_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-dev_user} -d ${POSTGRES_DB:-transactions_tracker_dev}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     networks:
-      - prisma-network
+      - transactions_tracker_network
+
+  postgres_test:
+    image: postgres:16-alpine
+    container_name: transactions-tracker-postgres-test
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_TEST_DB:-transactions_tracker_test}
+      POSTGRES_USER: ${POSTGRES_TEST_USER:-test_user}
+      POSTGRES_PASSWORD: ${POSTGRES_TEST_PASSWORD:-test_password}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "${POSTGRES_TEST_PORT:-5433}:5432"
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_TEST_USER:-test_user} -d ${POSTGRES_TEST_DB:-transactions_tracker_test}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - transactions_tracker_network
+    profiles:
+      - test
 
 volumes:
-  db_data:
+  postgres_dev_data:
+    driver: local
+  postgres_test_data:
+    driver: local
 
 networks:
-  prisma-network:
+  transactions_tracker_network:
+    driver: bridge

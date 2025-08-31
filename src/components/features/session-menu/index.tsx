@@ -20,10 +20,10 @@ const SessionMenu = ({ user }: SessionMenuProps) => {
       <DropdownMenuTrigger asChild className='outline-none '>
         <Button
           variant='ghost'
-          className='flex items-center justify-center rounded-full gap-1 px-1 py-0.5 h-10 bg-[#171923]'
+          className='flex items-center justify-center rounded-full gap-1 px-1 py-0.5 h-10 bg-muted hover:bg-muted/80 border border-border'
         >
           <Image src={user?.image ?? ''} alt='user image' width={35} height={35} className='rounded-full' />
-          <ChevronDown className='size-4 font-bold' />
+          <ChevronDown className='size-4 font-bold text-muted-foreground' />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>

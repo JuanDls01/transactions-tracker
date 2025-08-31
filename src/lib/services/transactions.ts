@@ -6,10 +6,7 @@ const transactionRepository = new TransactionRepository();
 
 export const getTransactions = async (currentPage: number, pageSize: number = DEFAULT_PAGE_SIZE) => {
   return withAuth(async (userId) => {
-    return transactionRepository.findMany(
-      { userId },
-      { page: currentPage, pageSize }
-    );
+    return transactionRepository.findMany({ userId }, { page: currentPage, pageSize });
   })();
 };
 
@@ -19,7 +16,9 @@ export const getTransactionById = async (id: number) => {
   })();
 };
 
-export const createTransaction = async (data: Omit<Parameters<TransactionRepository['create']>[0], 'authorId'>) => {
+export const createTransaction = async (
+  data: Omit<Parameters<TransactionRepository['create']>[0], 'authorId'>,
+) => {
   return withAuth(async (userId) => {
     return transactionRepository.create({
       ...data,
@@ -28,7 +27,9 @@ export const createTransaction = async (data: Omit<Parameters<TransactionReposit
   })();
 };
 
-export const updateTransaction = async (data: Omit<Parameters<TransactionRepository['update']>[0], 'authorId'>) => {
+export const updateTransaction = async (
+  data: Omit<Parameters<TransactionRepository['update']>[0], 'authorId'>,
+) => {
   return withAuth(async (userId) => {
     // First verify the transaction belongs to the user
     await transactionRepository.findById(data.id, userId);
