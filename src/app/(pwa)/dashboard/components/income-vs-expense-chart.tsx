@@ -2,8 +2,8 @@
 
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/ui/elements/card';
-import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/ui/elements/chart';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/ui/card';
+import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/ui/chart';
 
 const chartConfig = {
   income: {

@@ -1,11 +1,12 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/ui/elements/card';
-import { prisma } from '@/lib/prisma';
-import { DataTable } from '@/ui/components/data-table';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/ui/card';
+import { prisma } from '@repo/db';
+import { DataTable } from '@/features/data-table';
 import Link from 'next/link';
 import { parseDecimalToString } from '@/utils/numbers';
 import { transactionColumns } from '../transactions/transaction-columns';
 import { withAuth } from '@/utils/auth';
 import { getTransactions } from '@/lib/services/transactions';
+import { logger } from '@/lib/logger';
 
 const HomePage = async () => {
   const [currencyBalance, { transactions }] = await Promise.all([
@@ -84,7 +85,7 @@ const getCurrencyBalance = withAuth(async (userId) => {
 
     return currencyBalance;
   } catch (error) {
-    console.error('Error scanning items:', error);
+    logger.error('Failed to calculate currency balance', error as Error, 'getCurrencyBalance');
     throw error;
   }
 });

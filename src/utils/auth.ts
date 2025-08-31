@@ -1,5 +1,6 @@
 import { auth } from '@/app/auth';
-import { Session } from 'next-auth';
+import type { Session } from 'next-auth';
+import { AuthenticationError } from '@/lib/errors';
 
 /**
  * Returns true if user is authenticated and false if not.
@@ -11,14 +12,15 @@ export const getIfUserIsAuthenticated = (session: Session | null) => {
 export const getAuthenticatedUser = async () => {
   const session = await auth();
   if (!session?.user?.id) {
-    throw new Error('User not authenticated');
+    throw new AuthenticationError();
   }
   return session.user.id;
 };
 
-export const withAuth = <T>(fn: (userId: string) => Promise<T>) => {
-  return async () => {
+// Higher-order function that wraps functions requiring authentication
+export const withAuth = <T, A extends unknown[]>(fn: (userId: string, ...args: A) => Promise<T>) => {
+  return async (...args: A) => {
     const userId = await getAuthenticatedUser();
-    return fn(userId);
+    return fn(userId, ...args);
   };
 };

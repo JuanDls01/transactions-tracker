@@ -2,9 +2,9 @@ import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono, Inter } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 import './globals.css';
-import { Toaster } from '@/ui/elements/toaster';
+import { Toaster } from '@/ui/toaster';
 import { cn } from '@/lib/utils';
-import Header from '@/ui/components/navigation/header';
+import Header from '@/features/navigation/header';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',

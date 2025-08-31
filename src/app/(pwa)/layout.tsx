@@ -1,4 +1,4 @@
-import BottomNav from '@/ui/components/navigation/bottom-nav';
+import BottomNav from '@/components/features/navigation/bottom-nav';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

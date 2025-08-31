@@ -2,22 +2,21 @@
   "name": "transactions-tracker",
   "version": "0.1.0",
   "private": true,
+  "workspaces": ["packages/*"],
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "prisma generate && next build",
+    "build": "npm run db:generate && next build",
     "start": "next start",
     "lint": "next lint",
     "lint:prettier": "prettier --check .",
     "format": "prettier --write .",
     "commitlint": "commitlint --edit",
     "prepare": "husky install",
-    "prisma:migration": "npx prisma migrate dev",
-    "prisma:publish": "npx prisma db push",
-    "prisma:seed": "npx prisma db seed",
-    "postinstall": "prisma generate"
-  },
-  "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+    "db:generate": "npm run db:generate --workspace=@repo/db",
+    "db:migrate": "npm run db:migrate:dev --workspace=@repo/db",
+    "db:push": "npm run db:push --workspace=@repo/db",
+    "db:seed": "npm run db:seed --workspace=@repo/db",
+    "postinstall": "npm run db:generate"
   },
   "husky": {
     "hooks": {
@@ -28,6 +27,7 @@
     "*": "prettier --write"
   },
   "dependencies": {
+    "@repo/db": "workspace:*",
     "@auth/prisma-adapter": "^2.7.4",
     "@aws-sdk/client-dynamodb": "^3.726.1",
     "@hookform/resolvers": "^3.10.0",

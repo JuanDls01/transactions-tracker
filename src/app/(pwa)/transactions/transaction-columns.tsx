@@ -1,8 +1,8 @@
 'use client';
 
-import { Badge } from '@/ui/elements/badge';
-import { Button } from '@/ui/elements/button';
-import { CardContent } from '@/ui/elements/card';
+import { Badge } from '@/ui/badge';
+import { Button } from '@/ui/button';
+import { CardContent } from '@/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,26 +10,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/ui/elements/dropdown-menu';
-import { Transaction } from '@prisma/client';
+} from '@/ui/dropdown-menu';
+import { Transaction } from '@repo/db';
 import { ColumnDef } from '@tanstack/react-table';
 import { Ellipsis, MinusCircle, PlusCircleIcon } from 'lucide-react';
 import DeleteTransactionBttn from './components/delete-transaction-bttn';
 import Link from 'next/link';
-
-const categoryLabels = {
-  FOOD: 'Comida',
-  LEISURE: 'Ocio',
-  HEALTH: 'Salud',
-  HOME: 'Hogar',
-  SUBSCRIPTIONS: 'Subscripciones',
-  SAVINGS: 'Ahorro',
-  EDUCATION: 'Educación',
-  TRAVEL: 'Viajes',
-  WORK: 'Trabajo',
-  CAR: 'Auto',
-  MISCELLANEOUS: 'Otro',
-};
+import { TRANSACTION_CATEGORY_LABELS } from '@/lib/constants';
 
 export const transactionColumns: ColumnDef<Omit<Transaction, 'amount'> & { amount: string }>[] = [
   {
@@ -50,7 +37,7 @@ export const transactionColumns: ColumnDef<Omit<Transaction, 'amount'> & { amoun
           </span>
 
           <Badge variant={'outline'}>
-            <p className='max-w-12 overflow-hidden text-ellipsis'>{categoryLabels[category]}</p>
+            <p className='max-w-12 overflow-hidden text-ellipsis'>{TRANSACTION_CATEGORY_LABELS[category]}</p>
           </Badge>
         </CardContent>
       );
