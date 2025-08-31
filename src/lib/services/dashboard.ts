@@ -51,12 +51,12 @@ export interface DashboardParams {
 
 export const getDashboardData = withAuth(async (userId, params: DashboardParams) => {
   try {
-    const balancesService = getCurrencyBalance as any;
-    const transactionsService = getRecentTransactions as any;
+    const balancesService = getCurrencyBalance;
+    const transactionsService = getRecentTransactions;
 
     const [balances, recentTransactions] = await Promise.all([
-      balancesService.withAuth(userId)(),
-      transactionsService.withAuth(userId)(params.currency as Currency),
+      balancesService(userId),
+      transactionsService(userId, params.currency as Currency),
     ]);
 
     return {
@@ -71,7 +71,7 @@ export const getDashboardData = withAuth(async (userId, params: DashboardParams)
 
 const getRecentTransactions = withAuth(async (userId, currency?: Currency) => {
   try {
-    const where: any = { authorId: userId };
+    const where: { authorId: string; currency?: Currency } = { authorId: userId };
     if (currency) {
       where.currency = currency;
     }

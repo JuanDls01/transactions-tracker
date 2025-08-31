@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle, RefreshCw, Wifi, WifiOff } from 'lucide-react';
-import { ConnectionError } from '@/lib/errors';
 
 interface ErrorProps {
   error: Error & { digest?: string };

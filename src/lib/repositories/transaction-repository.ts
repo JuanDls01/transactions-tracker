@@ -32,7 +32,7 @@ export interface TransactionUpdateData extends Partial<TransactionData> {
 }
 
 export class TransactionRepository {
-  private handleDatabaseError(error: unknown, operation: string, context?: any): never {
+  private handleDatabaseError(error: unknown, operation: string, context?: Record<string, unknown>): never {
     const err = error as Error;
     
     if (isConnectionError(error)) {
