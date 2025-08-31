@@ -25,18 +25,22 @@ TuChanchito is a progressive web application (PWA) for tracking personal expense
 ## Architecture
 
 ### Database Schema
+
 The application uses PostgreSQL with Prisma ORM. Key models:
+
 - `Transaction` - Core financial records with amount (Decimal), type (INCOME/EXPENSE), category, currency
 - `User` - User accounts with NextAuth.js integration, supporting Google OAuth and custom auth
 - `Account` - NextAuth.js accounts table for provider management
 
 ### Authentication
+
 - NextAuth.js with Google OAuth provider
 - JWT strategy with custom callbacks to include user ID in session
 - Prisma adapter for database persistence
 - Auth utilities in `src/utils/auth.ts` with `withAuth` HOC for protected operations
 
 ### File Structure
+
 - `src/app/` - Next.js 15 app router with route groups
   - `(pwa)/` - Main PWA routes (dashboard, transactions, home)
   - `api/auth/` - NextAuth.js API routes
@@ -53,6 +57,7 @@ The application uses PostgreSQL with Prisma ORM. Key models:
 - `src/utils/` - Utility functions (auth, dates, numbers, etc.)
 
 ### Key Patterns
+
 - **Repository Pattern**: Database operations are isolated in `src/lib/repositories/` with proper error handling
 - **Service Layer**: Business logic in `src/lib/services/` wrapped with `withAuth()` for user isolation
 - **Error Handling**: Custom error classes with structured logging using `logger.ts`
@@ -64,16 +69,20 @@ The application uses PostgreSQL with Prisma ORM. Key models:
 - Chart components use Recharts library for data visualization
 
 ### Environment Variables
+
 Required for development:
+
 - `POSTGRES_PRISMA_URL` - Connection pooling URL
 - `POSTGRES_URL_NON_POOLING` - Direct connection URL
 - `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` - OAuth credentials
 - `AUTH_SECRET` - NextAuth.js secret
 
 ### Transaction Categories
+
 Fixed enum: LEISURE, HEALTH, HOME, SUBSCRIPTIONS, CAR, FOOD, SAVINGS, EDUCATION, TRAVEL, WORK, MISCELLANEOUS
 
 ### Currencies
+
 Supported: ARS (default), BTC, USD, USDT
 
 ## Code Quality
@@ -82,3 +91,9 @@ Supported: ARS (default), BTC, USD, USDT
 - Commitlint with conventional commits
 - ESLint with Next.js config
 - TypeScript strict mode enabled
+
+## RULES
+
+- NEVER write code without concrete functionality
+- NEVER mention Claude in commits
+- ALWAYS apply ESLint + Prettier
