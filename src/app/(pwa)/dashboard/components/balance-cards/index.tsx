@@ -2,6 +2,7 @@ import { Card, CardContent } from '@/ui/card';
 import { Currency } from '@repo/db';
 import { getCurrencyBalance } from '@/lib/services/dashboard';
 import { parseDecimalToString } from '@/utils/numbers';
+import { cardStyles } from '@/lib/card-styles';
 
 interface BalanceSummaryProps {
   searchParams: { currency?: string };
@@ -31,12 +32,10 @@ export async function BalanceSummary({ searchParams }: BalanceSummaryProps) {
     <div className='grid gap-4 md:grid-cols-2'>
       {Object.entries(filteredBalances).map(([currency, balance]) => {
         return (
-          <Card key={currency} className='bg-card border-0 shadow-sm'>
+          <Card key={currency} className={cardStyles.themed}>
             <CardContent className='p-6'>
               <div className='text-sm text-muted-foreground mb-2'>Saldo en {currency}</div>
-              <div className='text-3xl font-bold text-card-foreground'>
-                ${parseDecimalToString(balance)}
-              </div>
+              <div className='text-3xl font-bold text-card-foreground'>${parseDecimalToString(balance)}</div>
             </CardContent>
           </Card>
         );

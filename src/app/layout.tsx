@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     title: 'TuChanchito',
     capable: true,
-    statusBarStyle: 'black-translucent',
+    statusBarStyle: 'default',
   },
 };
 
@@ -45,6 +45,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
+      <head>
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased min-h-screen bg-background`}
       >
