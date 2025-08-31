@@ -1,6 +1,7 @@
 import { auth } from '@/app/auth';
-import { prisma } from '@/lib/prisma';
-import TransactionForm from '@/ui/components/transaction-form';
+import { prisma } from '@repo/db';
+import TransactionForm from '@/features/transaction-form';
+import { logger } from '@/lib/logger';
 import { notFound } from 'next/navigation';
 
 const EditTransactionPage = async ({ params }: { params: Promise<{ id: string }> }) => {
@@ -29,7 +30,7 @@ const getTransaction = async (id: string | number) => {
     });
     return transaction;
   } catch (err) {
-    console.error('Error scanning items', err);
+    logger.error('Failed to get transaction', err as Error, 'getTransaction', { id });
     throw err;
   }
 };

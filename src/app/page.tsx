@@ -1,7 +1,7 @@
-import SignInButton from '@/ui/components/signin-button';
 import { auth } from './auth';
 import Link from 'next/link';
-import { Button } from '@/ui/elements/button';
+import SignInButton from '@/components/features/signin-button';
+import { Button } from '@/components/ui/button';
 
 const Home = async () => {
   const session = await auth();

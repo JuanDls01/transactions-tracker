@@ -1,15 +1,24 @@
-import { prisma } from '@/lib/prisma';
-import { Currency, TransactionType } from '@prisma/client';
-import { firstDayOfMonth, lastDayOfMonth } from '@/utils/dates';
-import { Separator } from '@/ui/elements/separator';
+import { Separator } from '@/ui/separator';
 import MonthlyExpensesChart from './components/monthly-expenses-chart';
 import IncomeVsExpensesChart from './components/income-vs-expense-chart';
-import { withAuth } from '@/utils/auth';
+import { getMonthlyExpensesByCategoryFiltered, getIncomeVsExpensesPerMonth } from '@/lib/services/transactions';
 
-const DashboardPage = async () => {
+const DashboardPage = async (props: {
+  searchParams?: Promise<{
+    month?: string;
+    year?: string;
+  }>;
+}) => {
+  const searchParams = await props.searchParams;
+  const currentMonth = new Date().getMonth() + 1; // 1-indexed
+  const currentYear = new Date().getFullYear();
+
+  const selectedMonth = searchParams?.month ? Number.parseInt(searchParams.month) : currentMonth;
+  const selectedYear = searchParams?.year ? Number.parseInt(searchParams.year) : currentYear;
+
   const [incomeVsExpensesData, monthlyExpensesData] = await Promise.all([
-    getIncomesVsExpensesPerMonth(),
-    getMonthlyExpensesByCategory(),
+    getIncomeVsExpensesPerMonth(),
+    getMonthlyExpensesByCategoryFiltered(selectedYear, selectedMonth),
   ]);
 
   const totalExpenses = monthlyExpensesData.reduce((acc, curr) => acc + Number(curr.amount ?? 0), 0);
@@ -25,63 +34,14 @@ const DashboardPage = async () => {
       <Separator />
       <IncomeVsExpensesChart chartData={incomeVsExpensesData} />
       <Separator />
-      <MonthlyExpensesChart chartData={monthlyExpensesData} total={totalExpenses.toLocaleString()} />
+      <MonthlyExpensesChart
+        chartData={monthlyExpensesData}
+        total={totalExpenses.toLocaleString()}
+        selectedMonth={selectedMonth}
+        selectedYear={selectedYear}
+      />
     </>
   );
 };
-
-const getIncomesVsExpensesPerMonth = withAuth(async (userId) => {
-  try {
-    const data: { month: Date; income: number; expense: number }[] = await prisma.$queryRaw`
-      SELECT
-        DATE_TRUNC('month', "createdAt") AS month,
-        SUM(CASE WHEN "type" = 'INCOME' THEN "amount" ELSE 0 END) AS income,
-        SUM(CASE WHEN "type" = 'EXPENSE' THEN "amount" ELSE 0 END) AS expense
-      FROM "Transaction"
-      WHERE "createdAt" >= NOW() - INTERVAL '6 months'
-        AND "authorId" = ${userId}
-        AND "currency" = 'ARS'
-      GROUP BY DATE_TRUNC('month', "createdAt")
-      ORDER BY month;
-    `;
-
-    const response = data.map((item) => ({
-      month: new Date(item.month).toLocaleString('es-ES', { month: 'long', year: 'numeric' }),
-      income: Number(item.income),
-      expense: Number(item.expense),
-    }));
-
-    return response;
-  } catch (error) {
-    console.error('Error scanning items:', error);
-    throw error;
-  }
-});
-
-const getMonthlyExpensesByCategory = withAuth(async (userId) => {
-  try {
-    const monthlyExpensesByCategory = await prisma.transaction.groupBy({
-      by: ['category'],
-      where: {
-        authorId: userId,
-        type: TransactionType.EXPENSE,
-        currency: Currency.ARS,
-        createdAt: {
-          gte: firstDayOfMonth(),
-          lte: lastDayOfMonth(),
-        },
-      },
-      _sum: { amount: true },
-    });
-
-    return monthlyExpensesByCategory.map((exp) => ({
-      category: exp.category,
-      amount: Number(exp._sum.amount ?? 0),
-    }));
-  } catch (error) {
-    console.error('Error scanning items:', error);
-    throw error;
-  }
-});
 
 export default DashboardPage;

@@ -1,5 +1,5 @@
-import TransactionForm from '@/ui/components/transaction-form';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/ui/elements/card';
+import TransactionForm from '@/features/transaction-form';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/ui/card';
 
 const NewTransactionPage = () => {
   return (

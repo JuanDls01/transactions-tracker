@@ -1,4 +1,4 @@
-import { Button } from '@/ui/elements/button';
+import { Button } from '@/ui/button';
 import { deleteTransactionAction } from './actions';
 import { toast } from '@/hooks/use-toast';
 

@@ -1,4 +1,4 @@
-import { Card, CardContent } from '@/ui/elements/card';
+import { Card, CardContent } from '@/ui/card';
 import Link from 'next/link';
 import {
   Pagination,
@@ -6,8 +6,8 @@ import {
   PaginationItem,
   PaginationNext,
   PaginationPrevious,
-} from '@/ui/elements/pagination';
-import { DataTable } from '@/ui/components/data-table';
+} from '@/ui/pagination';
+import { DataTable } from '@/features/data-table';
 import { transactionColumns } from './transaction-columns';
 import { getTransactions } from '@/lib/services/transactions';
 
