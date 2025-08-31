@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/ui/card';
 import { cardStyles } from '@/lib/card-styles';
 import MonthlyExpensesChart from './components/monthly-expenses-chart';
@@ -38,15 +37,7 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
         <h1 className='text-3xl font-bold text-card-foreground'>Dashboard</h1>
       </div>
 
-      <Suspense
-        fallback={
-          <div className='grid gap-4 md:grid-cols-2'>
-            <div className='h-24 bg-white animate-pulse rounded-lg'></div>
-          </div>
-        }
-      >
-        <BalanceSummary searchParams={params || {}} />
-      </Suspense>
+      <BalanceSummary searchParams={params || {}} />
 
       <div className='grid gap-6 lg:grid-cols-2'>
         <Card className={cardStyles.themed}>
