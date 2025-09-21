@@ -11,7 +11,6 @@ import {
 import { DataTable } from '@/features/data-table';
 import { transactionColumns } from './transaction-columns';
 import { getTransactions } from '@/lib/services/transactions';
-import { Currency, TransactionType, TransactionCategory } from '@repo/db';
 import TransactionFilters from './components/transaction-filters';
 import { validateCurrency, validateTransactionType, validateTransactionCategory, validatePageNumber } from '@/utils/url-validation';
 
