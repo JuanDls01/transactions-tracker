@@ -1,12 +1,27 @@
 import { withAuth } from '@/utils/auth';
-import { TransactionRepository } from '@/lib/repositories/transaction-repository';
+import { TransactionRepository, TransactionFilters } from '@/lib/repositories/transaction-repository';
 import { DEFAULT_PAGE_SIZE } from '@/lib/constants';
+import { Currency, TransactionType, TransactionCategory } from '@repo/db';
 
 const transactionRepository = new TransactionRepository();
 
-export const getTransactions = async (currentPage: number, pageSize: number = DEFAULT_PAGE_SIZE) => {
+export const getTransactions = async (
+  currentPage: number,
+  pageSize: number = DEFAULT_PAGE_SIZE,
+  filters?: {
+    currency?: Currency;
+    type?: TransactionType;
+    category?: TransactionCategory;
+  }
+) => {
   return withAuth(async (userId) => {
-    return transactionRepository.findMany({ userId }, { page: currentPage, pageSize });
+    const transactionFilters: TransactionFilters = {
+      userId,
+      ...(filters?.currency && { currency: filters.currency }),
+      ...(filters?.type && { type: filters.type }),
+      ...(filters?.category && { category: filters.category }),
+    };
+    return transactionRepository.findMany(transactionFilters, { page: currentPage, pageSize });
   })();
 };
 
@@ -49,6 +64,6 @@ export const getMonthlyExpensesByCategoryFiltered = withAuth(
   },
 );
 
-export const getIncomeVsExpensesPerMonth = withAuth(async (userId: string) => {
-  return transactionRepository.getIncomeVsExpensesPerMonth(userId);
+export const getIncomeVsExpensesPerMonth = withAuth(async (userId: string, currency?: Currency) => {
+  return transactionRepository.getIncomeVsExpensesPerMonth(userId, currency);
 });

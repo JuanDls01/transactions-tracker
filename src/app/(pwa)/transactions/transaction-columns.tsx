@@ -17,6 +17,7 @@ import { Ellipsis, MinusCircle, PlusCircleIcon } from 'lucide-react';
 import DeleteTransactionBttn from './components/delete-transaction-bttn';
 import Link from 'next/link';
 import { TRANSACTION_CATEGORY_LABELS } from '@/lib/constants';
+import TooltipText from '@/components/ui/tooltip-text';
 
 export const transactionColumns: ColumnDef<Omit<Transaction, 'amount'> & { amount: string }>[] = [
   {
@@ -58,10 +59,14 @@ export const transactionColumns: ColumnDef<Omit<Transaction, 'amount'> & { amoun
   },
   {
     accessorKey: 'description',
-    header: () => <p className='text-left'>Descripción</p>,
+    header: () => <p className='text-left hidden sm:block'>Descripción</p>,
     cell: ({ row }) => {
-      const description = row.getValue('description');
-      return <div>{`${description}`}</div>;
+      const description = row.getValue('description') as string;
+      return (
+        <div className="hidden sm:block">
+          <TooltipText text={description} maxLength={25} className="text-sm" />
+        </div>
+      );
     },
   },
   {

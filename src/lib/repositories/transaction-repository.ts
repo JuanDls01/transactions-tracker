@@ -197,31 +197,62 @@ export class TransactionRepository {
     }
   }
 
-  async getIncomeVsExpensesPerMonth(userId: string) {
+  async getIncomeVsExpensesPerMonth(userId: string, currency?: Currency) {
     try {
-      const data: { month: Date; income: number; expense: number }[] = await prisma.$queryRaw`
-        SELECT
-          DATE_TRUNC('month', "createdAt") AS month,
-          SUM(CASE WHEN "type" = 'INCOME' THEN "amount" ELSE 0 END) AS income,
-          SUM(CASE WHEN "type" = 'EXPENSE' THEN "amount" ELSE 0 END) AS expense
-        FROM "Transaction"
-        WHERE "createdAt" >= NOW() - INTERVAL '6 months'
-          AND "authorId" = ${userId}
-          AND "currency" = 'ARS'
-        GROUP BY DATE_TRUNC('month', "createdAt")
-        ORDER BY month;
-      `;
+      const currencyFilter = currency || Currency.ARS;
+      const sixMonthsAgo = new Date();
+      sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
-      return data.map((item) => ({
-        month: new Date(item.month).toLocaleString('es-ES', {
+      // Get all transactions for the user in the last 6 months with the specified currency
+      const transactions = await prisma.transaction.findMany({
+        where: {
+          authorId: userId,
+          currency: currencyFilter,
+          createdAt: {
+            gte: sixMonthsAgo,
+          },
+        },
+        select: {
+          amount: true,
+          type: true,
+          createdAt: true,
+        },
+        orderBy: {
+          createdAt: 'asc',
+        },
+      });
+
+      // Group by month and calculate income/expenses
+      const monthlyData = new Map<string, { income: number; expense: number }>();
+
+      transactions.forEach((transaction) => {
+        const monthKey = new Date(transaction.createdAt).toLocaleString('es-ES', {
           month: 'long',
           year: 'numeric',
-        }),
-        income: Number(item.income),
-        expense: Number(item.expense),
+        });
+
+        if (!monthlyData.has(monthKey)) {
+          monthlyData.set(monthKey, { income: 0, expense: 0 });
+        }
+
+        const data = monthlyData.get(monthKey)!;
+        const amount = Number(transaction.amount);
+
+        if (transaction.type === TransactionType.INCOME) {
+          data.income += amount;
+        } else {
+          data.expense += amount;
+        }
+      });
+
+      // Convert to array format expected by the chart
+      return Array.from(monthlyData.entries()).map(([month, data]) => ({
+        month,
+        income: data.income,
+        expense: data.expense,
       }));
     } catch (error) {
-      this.handleDatabaseError(error, 'fetch income vs expenses per month', { userId });
+      this.handleDatabaseError(error, 'fetch income vs expenses per month', { userId, currency });
     }
   }
 }

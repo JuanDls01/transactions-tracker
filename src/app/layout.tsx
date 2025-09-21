@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Inter } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 import './globals.css';
 import { Toaster } from '@/ui/toaster';
+import { TooltipProvider } from '@/ui/tooltip';
 import { cn } from '@/lib/utils';
 import Header from '@/features/navigation/header';
 import { ThemeProvider } from '@/providers/theme-provider';
@@ -53,10 +54,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased min-h-screen bg-background`}
       >
         <ThemeProvider defaultTheme='system'>
-          <Header />
-          <div className={cn('border-grid flex flex-1 flex-col', 'font-inter')}>{children}</div>
-          <Toaster />
-          <Analytics />
+          <TooltipProvider>
+            <Header />
+            <div className={cn('border-grid flex flex-1 flex-col', 'font-inter')}>{children}</div>
+            <Toaster />
+            <Analytics />
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>

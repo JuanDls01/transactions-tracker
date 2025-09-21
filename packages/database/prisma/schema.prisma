@@ -19,6 +19,12 @@ model Transaction {
   description String?
   author      User                @relation(fields: [authorId], references: [id])
   authorId    String
+
+  @@index([authorId, createdAt])
+  @@index([authorId, currency])
+  @@index([authorId, type])
+  @@index([authorId, category])
+  @@index([authorId, currency, createdAt])
 }
 
 enum TransactionCategory {

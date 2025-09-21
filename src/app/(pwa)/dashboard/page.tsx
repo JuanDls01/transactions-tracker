@@ -2,17 +2,21 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/ui/card';
 import { cardStyles } from '@/lib/card-styles';
 import MonthlyExpensesChart from './components/monthly-expenses-chart';
 import IncomeVsExpensesChart from './components/income-vs-expense-chart';
+import ChartCurrencyFilter from './components/chart-currency-filter';
 import { BalanceSummary } from './components/balance-cards';
 import {
   getMonthlyExpensesByCategoryFiltered,
   getIncomeVsExpensesPerMonth,
 } from '@/lib/services/transactions';
+import { Currency } from '@repo/db';
+import { validateCurrency, validateMonth, validateYear } from '@/utils/url-validation';
 
 interface DashboardPageProps {
   searchParams?: Promise<{
     month?: string;
     year?: string;
     currency?: string;
+    chartCurrency?: string;
   }>;
 }
 
@@ -21,11 +25,12 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
   const currentMonth = new Date().getMonth() + 1;
   const currentYear = new Date().getFullYear();
 
-  const selectedMonth = params?.month ? Number.parseInt(params.month) : currentMonth;
-  const selectedYear = params?.year ? Number.parseInt(params.year) : currentYear;
+  const selectedMonth = validateMonth(params?.month) ?? currentMonth;
+  const selectedYear = validateYear(params?.year) ?? currentYear;
+  const selectedChartCurrency = validateCurrency(params?.chartCurrency) ?? Currency.ARS;
 
   const [incomeVsExpensesData, monthlyExpensesData] = await Promise.all([
-    getIncomeVsExpensesPerMonth(),
+    getIncomeVsExpensesPerMonth(selectedChartCurrency),
     getMonthlyExpensesByCategoryFiltered(selectedYear, selectedMonth),
   ]);
 
@@ -42,7 +47,10 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
       <div className='grid gap-6 lg:grid-cols-2'>
         <Card className={cardStyles.themed}>
           <CardHeader className='p-6'>
-            <CardTitle className='text-lg font-semibold text-card-foreground'>Ingresos vs Gastos</CardTitle>
+            <div className='flex items-center justify-between'>
+              <CardTitle className='text-lg font-semibold text-card-foreground'>Ingresos vs Gastos</CardTitle>
+              <ChartCurrencyFilter />
+            </div>
           </CardHeader>
           <CardContent className='p-6 pt-0'>
             <IncomeVsExpensesChart chartData={incomeVsExpensesData} />

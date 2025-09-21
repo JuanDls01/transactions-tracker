@@ -11,15 +11,32 @@ import {
 import { DataTable } from '@/features/data-table';
 import { transactionColumns } from './transaction-columns';
 import { getTransactions } from '@/lib/services/transactions';
+import { Currency, TransactionType, TransactionCategory } from '@repo/db';
+import TransactionFilters from './components/transaction-filters';
+import { validateCurrency, validateTransactionType, validateTransactionCategory, validatePageNumber } from '@/utils/url-validation';
 
 const MovementsPage = async (props: {
   searchParams?: Promise<{
     page?: string;
+    currency?: string;
+    type?: string;
+    category?: string;
   }>;
 }) => {
   const searchParams = await props.searchParams;
-  const currentPage = Number(searchParams?.page) || 1;
-  const { transactions } = await getTransactions(currentPage);
+  const currentPage = validatePageNumber(searchParams?.page);
+
+  const currency = validateCurrency(searchParams?.currency);
+  const type = validateTransactionType(searchParams?.type);
+  const category = validateTransactionCategory(searchParams?.category);
+
+  const filters = {
+    ...(currency && { currency }),
+    ...(type && { type }),
+    ...(category && { category }),
+  };
+
+  const { transactions } = await getTransactions(currentPage, 10, filters);
   if (!transactions.length) return <h1>Aún no has registrado transacciones</h1>;
   return (
     <div className='flex flex-col space-y-6 pb-24 sm:pb-6'>
@@ -37,6 +54,7 @@ const MovementsPage = async (props: {
       <Card className={cardStyles.themed}>
         <CardContent className='p-6'>
           <div className='space-y-4'>
+            <TransactionFilters />
             <DataTable columns={transactionColumns} data={transactions} />
             <Pagination>
               <PaginationContent>
